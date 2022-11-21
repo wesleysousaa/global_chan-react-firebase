@@ -44,7 +44,6 @@
     border-style: solid;
     border-radius: 6px;
     font-size: larger;
-    height: fit-content;
 }
 
 .message{
@@ -87,4 +86,5 @@ h3, h4{
     word-wrap: break-word;
     width: min-content;
     background-color: rgb(255, 255, 255);
+    box-shadow: 10px 5px 5px  rgba(0, 0, 0, 0.646);
 }

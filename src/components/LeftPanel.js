@@ -116,7 +116,7 @@ function LeftPanel({ user }) {
                 <p style={{ float: "left" }}>Nome</p>
                 <h1>{uExposed.nome}</h1>
               </div>
-              <div className="bio" style={{ wordWrap: "break-word" }}>
+              <div className="bio" style={{ wordWrap: "break-word", color:"black" }}>
                 <p style={{ alignSelf: "flex-start" }}>Biografia</p>
                 <h3 style={{ wordBreak: "break-word" }} >{uExposed.bio}</h3>
               </div>
@@ -151,7 +151,7 @@ function LeftPanel({ user }) {
             <div className="chat-input-group">
               <input onChange={(e) => setMessageValue(e.target.value)} value={messageValue} type="text" name="mensagem" className='menssage-input' />
               <IconButton onClick={sendMessage}>
-                <SendIcon fontSize='large'></SendIcon>
+                <SendIcon fontSize='medium'></SendIcon>
               </IconButton>
             </div>
           </form>
