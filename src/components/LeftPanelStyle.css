@@ -1,0 +1,89 @@
+.chat-container{
+    background-image: linear-gradient( rgba(0, 0, 0, 0.518), rgba(0, 0, 0, 0.37));
+    height: 80%;
+    width: 90%;
+    border-radius: 10px;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.chat{
+    background-color: white;
+    border-radius: 10px;
+    margin: 0.5em;
+    width: 60%;
+}
+
+.profile-friend{
+    border-radius: 10px;
+    margin: 0.5em;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    max-width: fit-content;
+}
+
+.chat-input-group{
+    display: flex;
+    margin: 5px;
+}
+
+.view-messages{
+    background-image: url("https://i.pinimg.com/originals/94/f2/a6/94f2a6bc8eab5465ffef40e7f4cb9afc.png");
+    border-radius: 2%;
+    margin: 5px;
+    border-style: none;
+    border-left: solid 2px;
+    height: 93%;
+    display: flex;
+    flex-direction: column;
+}
+
+.menssage-input{
+    width: 95%;
+    border-style: solid;
+    border-radius: 6px;
+    font-size: larger;
+}
+
+.message{
+    margin: 5px;
+    padding:5px;
+    background-color: rgba(0, 0, 0, 0.453);
+    display: flex;
+    flex-direction: column;
+    width: max-content;
+    max-width: 70%;
+    border-radius: 0px 6px 6px 6px;
+    word-wrap: break-word;
+}
+
+.message:hover{
+    background-color: rgba(0, 0, 0, 0.202);
+    cursor: pointer;
+}
+
+p{
+    margin: 0px;
+    display: flex;
+    justify-content: end;
+}
+
+h3, h4{
+    margin: 0px;
+}
+
+.picture-profile{
+    height: 30%;
+    margin: 10px;
+    border-radius: 10px;
+}
+
+.card-perfil{
+    background-color: rgba(0, 0, 0, 0.242);
+    border-radius: 10px;
+    height: 50em;
+    word-wrap: break-word;
+    width: min-content;
+    max-height: fit-content;
+}

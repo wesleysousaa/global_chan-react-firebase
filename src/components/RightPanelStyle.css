@@ -1,0 +1,60 @@
+
+.profile {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    word-wrap: break-word;
+}
+
+.img_name {
+    background-size: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    border-radius: 6px;
+    padding: 5px;
+    background-image: linear-gradient( rgba(0, 0, 0, 0.382), rgba(0, 0, 0, 0.224));
+    max-width: fit-content;
+}
+
+.img_name:hover{
+    background-color: white;
+    cursor: pointer;
+}
+
+.img {
+    height: 30vh;
+    margin: 0px;
+}
+
+.nome {
+    padding: 5px;
+    color: black;
+    margin: 5px;
+    
+    border-left: solid black 4px;
+}
+
+.bio{
+    padding: 5px;
+    width: 70%;
+    color: white;
+    margin: 5px;
+    display: flex;
+    flex-direction: column;
+    align-self: flex-start;
+}
+
+input{
+    background: none;
+    
+}
+
+.ballon-profile{
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    
+}

@@ -1,38 +1,176 @@
-.App {
-  text-align: center;
+*{
+  font-family: -apple-system,system-ui,"Segoe UI",Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji";
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.m{
+  background-image: url("https://static.vecteezy.com/ti/vetor-gratis/p1/2909370-luxo-abstrato-banner-fundo-moderno-formas-geometricas-e-ouro-linha-arte-papel-de-parede-design-para-site-impressoes-capa-fundo-parede-arte-e-decoracao-de-parede-vetor.jpg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  height: 100vh;
+}
+.App{
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  height: 100vh;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+.left {
+  width: 60%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.right,
+.left {
+  display: flex;
+  height: 100%;
+}
+
+.right {
+  align-self: flex-start;
+  width: 40%;
+}
+
+
+.login-register{
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  height: 100vh;
+  background-repeat: no-repeat;
+  background-size: cover;
 }
 
-.App-link {
-  color: #61dafb;
+.bt-cadastrar{
+  margin-top: 5vh;
+  border-style: none;
+  background-color: #d9dbdb00;
+  font-size: 2vh;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.bt-cadastrar:hover{
+  color: #298e46;
+}
+
+.forms{
+  align-self: center;
+  display: flex;
+  flex-direction: column;
+  padding: 5vh;
+  background-image:  linear-gradient(rgba(255, 255, 255, 0.664), rgba(255, 255, 255, 0.35));
+  border-radius: 6px;
+}
+
+.labels{
+  display: flex;
+  flex-direction: column;
+  font-size: 3vh;
+  margin-bottom: 2vh;
+}
+
+.inputs{
+  font-size: 2vh;
+  height: 3vh;
+  width: 15vw;
+  border-style: none;
+  border-bottom: solid 1px;
+  
+}
+
+.confirm-button, .cancel-button{
+  margin-top: 1vh;
+  height: 5vh;
+}
+
+.confirm-button{
+  background-color: #2ea44f;
+}
+
+.cancel-button{
+  background-color: #a42e2e;
+}
+
+.confirm-button, .cancel-button {
+  appearance: none;
+  border: 1px solid rgba(27, 31, 35, .15);
+  border-radius: 6px;
+  box-shadow: rgba(27, 31, 35, .1) 0 1px 0;
+  box-sizing: border-box;
+  color: rgb(255, 255, 255);
+  cursor: pointer;
+  display: inline-block;
+  font-size: 2vh;
+  font-weight: 600;
+  line-height: 20px;
+  padding: 6px 16px;
+  position: relative;
+  text-align: center;
+  text-decoration: none;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  vertical-align: middle;
+  white-space: nowrap;
+}
+
+
+.confirm-button, .cancel-button:focus:not(:focus-visible):not(.focus-visible) {
+  box-shadow: none;
+  outline: none;
+}
+
+.confirm-button:hover {
+  background-color: #2c974b;
+  cursor: pointer;
+}
+
+.cancel-button:hover{
+  background-color: #972c2c;
+}
+
+.confirm-button:focus{
+  box-shadow: rgba(46, 164, 79, .4) 0 0 0 3px;
+}
+
+.cancel-button:focus{
+  box-shadow: rgba(164, 46, 46, 0.4) 0 0 0 3px;
+}
+
+.confirm-button, .cancel-button:focus {
+  outline: none;
+}
+
+.confirm-button:disabled{
+  background-color: #94d3a2;
+}
+
+.cancel-button:disabled{
+  background-color: #d39494;
+}
+
+.confirm-button, .cancel-button:disabled {
+  border-color: rgba(27, 31, 35, .1);
+  color: rgba(255, 255, 255, .8);
+  cursor: default;
+}
+
+.cancel-button:active{
+  background-color: #8e2929;
+}
+
+.confirm-button:active{
+  background-color: #298e46;
+}
+
+.confirm-button, .cancel-button:active {
+  box-shadow: rgba(20, 70, 32, .2) 0 1px 0 inset;
+}
+
+.bts{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
 }
