@@ -37,7 +37,7 @@
     height: 93%;
     display: flex;
     flex-direction: column;
-    overflow-y: auto;
+    overflow-y: scroll;
 }
 
 .menssage-input{
