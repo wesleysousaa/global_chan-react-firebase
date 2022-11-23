@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, {  useState } from 'react';
 import './RightPanelStyle.css';
 import { db } from '../db/firebase-config';
 import { doc, updateDoc } from "firebase/firestore";
@@ -121,7 +121,7 @@ function RightPanel({ user, acesso, goBack }) {
       {scene === 'change' && (
         <div className="login-register" style={{ backgroundImage: 'none' }}>
 
-          <Zoom in={alertTime} style={{ transitionDelay: alertTime ? '0ms' : '0ms' }}>
+          <Zoom in={alertTime} style={{ transitionDelay: alertTime ? '0ms' : '500ms' }}>
             <Alert variant="filled" severity="success" Tran>
               Dados alterados com Sucesso
             </Alert>

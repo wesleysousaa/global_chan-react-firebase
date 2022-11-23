@@ -35,10 +35,9 @@ function LeftPanel({ user, acesso }) {
       setMessages(data.docs.map((message, k) => ({ ...message.data() })))
     }
     fetchData()
-
-
   }, [timer])
   //[timer]
+
   useEffect(() => {
     async function fetchData() {
       const data = await getDocs(usersCollectionRef)
@@ -58,6 +57,7 @@ function LeftPanel({ user, acesso }) {
       setUsers(arr)
     }
     fetchData()
+
   }, [timer])
   //[timer], [messageValue]
   function organizeMessages() {
@@ -69,6 +69,7 @@ function LeftPanel({ user, acesso }) {
       }
     })
   }
+
   function autorName(mensagem) {
     return users.find(u => u.email === mensagem.autor)
   }
@@ -84,7 +85,6 @@ function LeftPanel({ user, acesso }) {
       }, 2000);
       return
     }
-
 
     const newMessage = {
       autor: userLogado.email,
@@ -127,7 +127,7 @@ function LeftPanel({ user, acesso }) {
           setTimer(!timer)
         }, 5000)}
       </h5>
-      
+
       {scene !== "profile" && (
         <div className="chat-container">
           <div className="profile-friend">
@@ -192,10 +192,6 @@ function LeftPanel({ user, acesso }) {
               </div>
             </form>
           </div>
-
-
-
-
         </div>
       )}
       {scene === 'profile' && (
