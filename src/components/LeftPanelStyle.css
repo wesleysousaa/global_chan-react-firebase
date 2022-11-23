@@ -8,10 +8,13 @@
 }
 
 .chat{
-    background-color: white;
     border-radius: 10px;
     margin: 0.5em;
     width: 60%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background-color: white;
 }
 
 .profile-friend{
@@ -39,6 +42,7 @@
     flex-direction: column;
     overflow-y: auto;
 }
+
 
 .menssage-input{
     width: 95%;
@@ -88,4 +92,53 @@ h3, h4{
     width: min-content;
     background-color: rgb(255, 255, 255);
     box-shadow: 10px 5px 5px  rgba(0, 0, 0, 0.646);
+}
+
+.chat-input-group{
+    display: flex;
+    align-self: center;
+}
+
+.navigation-group{
+    display: none;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+    margin-bottom: 1em;
+
+}
+
+
+@media (max-width: 1130px){
+
+    .m{
+        align-items: center;
+        justify-content: center;
+
+    }
+    .chat-container{
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .chat{
+        width: 100%;
+        height: 100%;
+        margin: 0px;
+    }
+
+    .menssage-input{
+        height: fit-content;
+    }
+
+    .profile-friend{
+        display: none;
+    }
+
+}
+
+@media (max-width: 1200px){
+    .navigation-group{
+        display: flex;
+    } 
 }

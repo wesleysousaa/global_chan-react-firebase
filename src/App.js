@@ -132,8 +132,8 @@ function App() {
       {users && (
         userLogado ? (
           <div className="App">
-            <LeftPanel className="left" user={userLogado} />
-            {console.log("no app" + userLogado.id)}
+            <LeftPanel className="left" user={userLogado} acesso={changeScene} />
+
             <RightPanel className="right" user={userLogado} acesso={changeScene}/>
           </div>
         ):(
@@ -185,13 +185,6 @@ function App() {
           )
         
       )}
-
-
-
-
-
-      
-
     </div>
   );
 }

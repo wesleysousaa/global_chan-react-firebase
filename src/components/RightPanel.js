@@ -6,7 +6,7 @@ import Alert from '@mui/material/Alert';
 import Zoom from '@mui/material/Zoom';
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 
-function RightPanel({ user, acesso }) {
+function RightPanel({ user, acesso, goBack }) {
   const storage = getStorage()
 
   const [scene, setScene] = useState("home")
@@ -88,7 +88,7 @@ function RightPanel({ user, acesso }) {
 
 
   return (
-    <div className='right'>
+    <div className={acesso ? "right" : "right-smartphone"}>
       {scene === 'home' && (
         <div className="profile">
           <h1 style={{ borderBottom: "solid 5px black" }}>Meu Perfil</h1>
@@ -106,7 +106,13 @@ function RightPanel({ user, acesso }) {
             </div>
 
           </div>
-          <button className='cancel-button' onClick={exit}>Sair</button>
+          {acesso && (
+            <button className='cancel-button' onClick={exit}>Sair</button>
+          )}
+          {!acesso && (
+            <button className='cancel-button' onClick={goBack}>Voltar</button>
+          )}
+          
         </div>
       )}
       {scene === 'change' && (
@@ -123,7 +129,7 @@ function RightPanel({ user, acesso }) {
             <h2 style={mensagem === "Sucesso!" ? { color: "green" } : { color: "red" }}>{mensagem}</h2>
             <label className='labels'>
               Imagem
-              <input className='confirm-button' onChange={(e) => setImg(e.target.files[0])} type="file" name="foto" style={{maxWidth:"15vw"}}/>
+              <input className='confirm-button' onChange={(e) => setImg(e.target.files[0])} type="file" name="foto" style={{width:"20em"}}/>
             </label>
 
             <label className="labels">
