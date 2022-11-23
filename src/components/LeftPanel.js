@@ -58,7 +58,7 @@ function LeftPanel({ user, acesso }) {
       setUsers(arr)
     }
     fetchData()
-  }, [timer])
+  }, [timer], [messageValue])
   //[timer], [messageValue]
   function organizeMessages() {
     messages.sort(function (a, b) {
