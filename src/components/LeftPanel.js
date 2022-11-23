@@ -37,7 +37,7 @@ function LeftPanel({ user, acesso }) {
     fetchData()
 
 
-  }, [])
+  }, [timer])
   //[timer]
   useEffect(() => {
     async function fetchData() {
@@ -58,7 +58,7 @@ function LeftPanel({ user, acesso }) {
       setUsers(arr)
     }
     fetchData()
-  }, [timer], [messageValue])
+  }, [timer])
   //[timer], [messageValue]
   function organizeMessages() {
     messages.sort(function (a, b) {
@@ -94,6 +94,7 @@ function LeftPanel({ user, acesso }) {
 
     await addDoc(messagesCollectionRef, newMessage)
 
+    await setTimer(!timer)
   }
 
   function userExposed(uE) {
@@ -120,31 +121,31 @@ function LeftPanel({ user, acesso }) {
   return (
 
     <div className='left'>
+      <h5 style={{ display: "none" }}>
+        {organizeMessages()}
+        {setTimeout(() => {
+          setTimer(!timer)
+        }, 5000)}
+      </h5>
+      
       {scene !== "profile" && (
-      <div className="chat-container">
-        <div className="profile-friend">
-          <h5 style={{ display: "none" }}>
-            {organizeMessages()}
-            {setTimeout(() => {
-              setTimer(!timer)
-            }, 5000)}
-          </h5>
-          
-          <div className="card-perfil">
-            <img className='picture-profile' src={uExposed.img} alt="perfil" />
-            <div className="ballon-profile" style={{ flexDirection: "column" }}>
-              <div className="nome" style={{ alignSelf: "flex-start" }}>
-                <p style={{ float: "left" }}>Nome</p>
-                <h1>{uExposed.nome}</h1>
-              </div>
-              <div className="bio" style={{ wordWrap: "break-word", color: "black" }}>
-                <p style={{ alignSelf: "flex-start" }}>Biografia</p>
-                <h3 style={{ wordBreak: "break-word" }} >{uExposed.bio ? uExposed.bio : "Este usuário não possui nenhuma Bio"}</h3>
+        <div className="chat-container">
+          <div className="profile-friend">
+            <div className="card-perfil">
+              <img className='picture-profile' src={uExposed.img} alt="perfil" />
+              <div className="ballon-profile" style={{ flexDirection: "column" }}>
+                <div className="nome" style={{ alignSelf: "flex-start" }}>
+                  <p style={{ float: "left" }}>Nome</p>
+                  <h1>{uExposed.nome}</h1>
+                </div>
+                <div className="bio" style={{ wordWrap: "break-word", color: "black" }}>
+                  <p style={{ alignSelf: "flex-start" }}>Biografia</p>
+                  <h3 style={{ wordBreak: "break-word" }} >{uExposed.bio ? uExposed.bio : "Este usuário não possui nenhuma Bio"}</h3>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-        
+
           <div className="chat">
             <div className="navigation-group">
               <Fab variant="extended" color='error' size="medium" aria-label="add" onClick={exit}>
@@ -186,20 +187,20 @@ function LeftPanel({ user, acesso }) {
               <div className="chat-input-group">
                 <input onChange={(e) => setMessageValue(e.target.value)} value={messageValue} type="text" name="mensagem" className='menssage-input' />
                 <IconButton onClick={sendMessage}>
-                  <SendIcon fontSize='medium' style={{padding:"0px"}}></SendIcon>
+                  <SendIcon fontSize='medium' style={{ padding: "0px" }}></SendIcon>
                 </IconButton>
               </div>
             </form>
           </div>
-        
 
 
-        
-      </div>
+
+
+        </div>
       )}
       {scene === 'profile' && (
-          <RightPanel className="right" user={userLogado} goBack={goChat}  />
-        )}
+        <RightPanel className="right" user={userLogado} goBack={goChat} />
+      )}
     </div>
   )
 }
