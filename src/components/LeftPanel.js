@@ -125,9 +125,9 @@ function LeftPanel({ user, acesso }) {
         <div className="profile-friend">
           <h5 style={{ display: "none" }}>
             {organizeMessages()}
-            {/* {setTimeout(() => {
+            {setTimeout(() => {
               setTimer(!timer)
-            }, 5000)} */}
+            }, 5000)}
           </h5>
           
           <div className="card-perfil">
