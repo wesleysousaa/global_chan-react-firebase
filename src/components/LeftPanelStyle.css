@@ -1,3 +1,7 @@
+.view-messages::-webkit-scrollbar{
+    width: 0em;
+}
+
 .chat-container {
     background-image: linear-gradient(rgba(0, 0, 0, 0.518), rgba(0, 0, 0, 0.37));
     height: 80%;
@@ -42,7 +46,6 @@
     flex-direction: column;
     overflow-y: auto;
 }
-
 
 .menssage-input {
     width: 95%;
