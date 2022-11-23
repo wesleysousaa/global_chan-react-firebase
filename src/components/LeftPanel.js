@@ -79,9 +79,9 @@ function LeftPanel({ user, acesso }) {
     if (messageValue.trim().length === 0) {
       setMessageValue('')
       setAlertMessage(true)
-      // setTimeout(() => {
-      //   setAlertMessage(false)
-      // }, 2000);
+      setTimeout(() => {
+        setAlertMessage(false)
+      }, 2000);
       return
     }
 
