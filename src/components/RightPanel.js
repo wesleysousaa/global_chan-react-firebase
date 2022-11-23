@@ -54,7 +54,7 @@ function RightPanel({ user, acesso, goBack }) {
 
     const userDoc = doc(db, 'users', user.id)
 
-    await updateDoc(userDoc, userUpadated).then((e) =>{
+    await updateDoc(userDoc, userUpadated).then((e) => {
       console.log("terceiro persistiu");
     })
     setMensagem("")
@@ -72,18 +72,21 @@ function RightPanel({ user, acesso, goBack }) {
 
   async function uploadImage() {
 
-    const imageRef = ref(storage, "images-profile/" + id)
+    if (img) {
+      const imageRef = ref(storage, "images-profile/" + id)
 
-    await uploadBytes(imageRef, img).then((snapshot) => {
-      console.log("primeiro Sucesso");
-    })
+      await uploadBytes(imageRef, img).then((snapshot) => {
+        console.log("primeiro Sucesso");
+      })
 
-    const url = await getDownloadURL(imageRef).then((url) => {
+      const url = await getDownloadURL(imageRef).then((url) => {
+        return url
+      })
+
+      setImgURL(url)
       return url
-    })
-
-    setImgURL(url)
-    return url
+    }
+    return user.img
   }
 
 
@@ -112,7 +115,7 @@ function RightPanel({ user, acesso, goBack }) {
           {!acesso && (
             <button className='cancel-button' onClick={goBack}>Voltar</button>
           )}
-          
+
         </div>
       )}
       {scene === 'change' && (
@@ -129,7 +132,7 @@ function RightPanel({ user, acesso, goBack }) {
             <h2 style={mensagem === "Sucesso!" ? { color: "green" } : { color: "red" }}>{mensagem}</h2>
             <label className='labels'>
               Imagem
-              <input className='confirm-button' onChange={(e) => setImg(e.target.files[0])} type="file" name="foto" style={{width:"20em"}}/>
+              <input className='confirm-button' onChange={(e) => setImg(e.target.files[0])} type="file" accept='image/*' name="foto" style={{ width: "20em" }} />
             </label>
 
             <label className="labels">

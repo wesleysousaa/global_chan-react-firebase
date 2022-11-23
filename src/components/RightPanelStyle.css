@@ -23,8 +23,8 @@
 }
 
 .img {
-    height: 30vh;
-    margin: 0px;
+    width: 15em;
+    height: auto;
 }
 
 .nome {
