@@ -161,18 +161,19 @@ function LeftPanel({ user, acesso }) {
             {scene === "exposed" && (
               <MiniProfileCard user={uExposed} back={goChat} />
             )}
-            <div className="view-messages">
-              {!messages[0] && (
-                <CircularProgress size={100} style={!messages[0] ? { alignSelf: "center" } : { alignSelf: "center", display: "none" }} />
-              )}
-
-              {alertMessage && (
+            {alertMessage && (
                 <Zoom in={alertMessage} style={{ transitionDelay: alertMessage ? '0ms' : '0ms' }}>
                   <Alert variant="filled" severity="error" Tran>
                     Digite o corpo da mensagem
                   </Alert>
                 </Zoom>
               )}
+            <div className="view-messages">
+              {!messages[0] && (
+                <CircularProgress size={100} style={!messages[0] ? { alignSelf: "center" } : { alignSelf: "center", display: "none" }} />
+              )}
+
+              
               {messages.length > 0 && (
                 messages.map((m, k) => (
                   <div key={k} className="message" onClick={() => userExposed(autorName(m))} style={m.autor === userLogado.email ? { alignSelf: "flex-end", borderRadius: "6px 0px 6px 6px", backgroundColor: "rgba(255, 255, 255, 0.677)" } : { color: "white" }}>
