@@ -100,6 +100,7 @@ function LeftPanel({ user, acesso }) {
   function userExposed(uE) {
     setUExposed(uE)
     setScene("exposed")
+
   }
 
   function formatData(m) {
