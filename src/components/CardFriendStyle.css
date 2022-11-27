@@ -1,0 +1,16 @@
+.friend{
+   display: flex;
+   padding: 0.5em;
+   justify-content: space-between;
+   align-items: center;
+   background-color: white;
+   border-radius: 5em;
+   margin-bottom: 0.3em; 
+   color: black;
+}
+
+.mini-picture{
+    width: 5em;
+    height: 5em;
+    border-radius: 50em;
+}

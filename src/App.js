@@ -41,7 +41,8 @@ function App() {
           email: user.data().email,
           senha: user.data().senha,
           bio: user.data().bio,
-          img: user.data().img
+          img: user.data().img,
+          amigos: user.data().amigos ? user.data().amigos : []
         }
         arr.push(u)
         emails.push(u.email)
@@ -49,7 +50,7 @@ function App() {
       setUsers(arr)
     }
     fetchData()
-  }, [userLogado], [])
+  }, [userLogado], [scene])
 
   function handleLogin(e) {
     e.preventDefault()
@@ -102,8 +103,6 @@ function App() {
       img: "https://firebasestorage.googleapis.com/v0/b/chanproject-f6e42.appspot.com/o/images-profile%2Fdefault-user.png?alt=media&token=e9d896cc-bcfd-4d18-9fdc-f3ead380cc18"
     }
 
-    console.log(mensagemCadastro)
-
     await addDoc(usersCollectionRef, newUser)
     setRecent(!recent)
     setUserLogado(newUser)
@@ -122,9 +121,12 @@ function App() {
     setMensagemCadastro('')
   }
 
+  function refreshUser(u){
+    setUserLogado(u)
+  }
+
   return (
     <div className="m" style={!users ? {display: "flex", alignItems:"center", justifyContent:"center"} : {}}>
-
       {!users && (
           <CircularProgress size={200} />
       )}
@@ -133,8 +135,7 @@ function App() {
         userLogado ? (
           <div className="App">
             <LeftPanel className="left" user={userLogado} acesso={changeScene} />
-
-            <RightPanel className="right" user={userLogado} acesso={changeScene}/>
+            <RightPanel className="right" user={userLogado} acesso={changeScene} users={users} userUpadated={refreshUser}/>
           </div>
         ):(
             scene === "login" ? (
@@ -161,7 +162,7 @@ function App() {
                     <h2 style={{ color: "red" }}>{mensagemCadastro}</h2>
                     <label className="labels">
                       Nome
-                      <input value={newNome} style={mensagemCadastro === "Campo obrigatório" && newNome.trim().length === 0 ? { color: "red", borderColor: "red" } : {}} className="inputs" type="text" onChange={(e) => setNewNome(e.target.value)} />
+                      <input maxLength={12} value={newNome} style={mensagemCadastro === "Campo obrigatório" && newNome.trim().length === 0 ? { color: "red", borderColor: "red" } : {}} className="inputs" type="text" onChange={(e) => setNewNome(e.target.value)} />
                     </label>
                     <label className="labels">
                       Email
@@ -173,7 +174,7 @@ function App() {
                     </label>
                     <label className="labels">
                       Biografia
-                      <input value={newBio} style={newBio.trim().length === 0 && mensagemCadastro === "Campo obrigatório" ? { color: "red", borderColor: "red" } : {}} className="inputs" type="text" name="Senha" onChange={(e) => setNewBio(e.target.value)} />
+                      <input maxLength={50} value={newBio} style={newBio.trim().length === 0 && mensagemCadastro === "Campo obrigatório" ? { color: "red", borderColor: "red" } : {}} className="inputs" type="text" name="Senha" onChange={(e) => setNewBio(e.target.value)} />
                     </label>
                     <div className="bts">
                       <input type="button" value="Voltar" className="cancel-button" onClick={changeScene} />
@@ -183,7 +184,6 @@ function App() {
                 </div>
               )
           )
-        
       )}
     </div>
   );

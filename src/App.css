@@ -1,14 +1,15 @@
-*{
-  font-family: -apple-system,system-ui,"Segoe UI",Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji";
+* {
+  font-family: -apple-system, system-ui, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
 }
 
-.m{
+.m {
   background-image: url("https://static.vecteezy.com/ti/vetor-gratis/p1/2909370-luxo-abstrato-banner-fundo-moderno-formas-geometricas-e-ouro-linha-arte-papel-de-parede-design-para-site-impressoes-capa-fundo-parede-arte-e-decoracao-de-parede-vetor.jpg");
   background-repeat: no-repeat;
   background-size: cover;
   height: 100vh;
 }
-.App{
+
+.App {
   display: flex;
   flex-direction: row;
   justify-content: center;
@@ -23,7 +24,8 @@
 }
 
 .right,
-.left {
+.left,
+.friends {
   display: flex;
   height: 100%;
 }
@@ -31,10 +33,10 @@
 .right {
   align-self: flex-start;
   width: 40%;
+  align-items: center;
 }
 
-
-.login-register{
+.login-register {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -44,56 +46,58 @@
   background-size: cover;
 }
 
-.bt-cadastrar{
+.bt-cadastrar {
   margin-top: 5vh;
   border-style: none;
   background-color: #d9dbdb00;
   font-size: 2vh;
 }
 
-.bt-cadastrar:hover{
+.bt-cadastrar:hover {
   color: #298e46;
 }
 
-.forms{
+.forms {
   align-self: center;
   display: flex;
   flex-direction: column;
   padding: 5vh;
-  background-image:  linear-gradient(rgba(255, 255, 255, 0.664), rgba(255, 255, 255, 0.35));
+  background-image: linear-gradient(rgba(255, 255, 255, 0.664), rgba(255, 255, 255, 0.35));
   border-radius: 6px;
 }
 
-.labels{
+.labels {
   display: flex;
   flex-direction: column;
   font-size: 3vh;
   margin-bottom: 2vh;
 }
 
-.inputs{
+.inputs {
   font-size: 2vh;
   height: 3vh;
   width: 100%;
   border-style: none;
   border-bottom: solid 1px;
-  
+
 }
 
-.confirm-button, .cancel-button{
+.confirm-button,
+.cancel-button {
   margin-top: 1vh;
   height: 5vh;
 }
 
-.confirm-button{
+.confirm-button {
   background-color: #2ea44f;
 }
 
-.cancel-button{
+.cancel-button {
   background-color: #a42e2e;
 }
 
-.confirm-button, .cancel-button {
+.confirm-button,
+.cancel-button {
   appearance: none;
   border: 1px solid rgba(27, 31, 35, .15);
   border-radius: 6px;
@@ -117,7 +121,8 @@
 }
 
 
-.confirm-button, .cancel-button:focus:not(:focus-visible):not(.focus-visible) {
+.confirm-button,
+.cancel-button:focus:not(:focus-visible):not(.focus-visible) {
   box-shadow: none;
   outline: none;
 }
@@ -127,63 +132,69 @@
   cursor: pointer;
 }
 
-.cancel-button:hover{
+.cancel-button:hover {
   background-color: #972c2c;
 }
 
-.confirm-button:focus{
+.confirm-button:focus {
   box-shadow: rgba(46, 164, 79, .4) 0 0 0 3px;
 }
 
-.cancel-button:focus{
+.cancel-button:focus {
   box-shadow: rgba(164, 46, 46, 0.4) 0 0 0 3px;
 }
 
-.confirm-button, .cancel-button:focus {
+.confirm-button,
+.cancel-button:focus {
   outline: none;
 }
 
-.confirm-button:disabled{
+.confirm-button:disabled {
   background-color: #94d3a2;
 }
 
-.cancel-button:disabled{
+.cancel-button:disabled {
   background-color: #d39494;
 }
 
-.confirm-button, .cancel-button:disabled {
+.confirm-button,
+.cancel-button:disabled {
   border-color: rgba(27, 31, 35, .1);
   color: rgba(255, 255, 255, .8);
   cursor: default;
 }
 
-.cancel-button:active{
+.cancel-button:active {
   background-color: #8e2929;
 }
 
-.confirm-button:active{
+.confirm-button:active {
   background-color: #298e46;
 }
 
-.confirm-button, .cancel-button:active {
+.confirm-button,
+.cancel-button:active {
   box-shadow: rgba(20, 70, 32, .2) 0 1px 0 inset;
 }
 
-.bts{
+.bts {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
 }
 
-@media (max-width: 670px){
-  
-  .left{
+@media (max-width: 670px) {
+  .left {
     width: 100%;
   }
-  
 }
-@media (max-width: 1200px){
-  .right{
+
+@media (max-width: 1200px) {
+  .right {
+    display: none;
+  }
+
+  .friends {
     display: none;
   }
 }

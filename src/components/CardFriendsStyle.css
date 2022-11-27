@@ -1,0 +1,27 @@
+.friends, .friends-smartphone {
+    background-image: linear-gradient(rgba(0, 0, 0, 0.382), rgba(0, 0, 0, 0.224));
+    height: fit-content;
+    max-width: 80%;
+    border-radius: 6px;
+    color: white;
+    overflow: auto;
+    padding: 1em;
+    display: flex;
+    flex-direction: column;
+}
+
+.list-friends {
+    display: flex;
+    flex-direction: column;
+}
+
+.header-cards-friends{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.title-cards-friends{
+    margin-right: 1em;
+}

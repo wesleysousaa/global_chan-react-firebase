@@ -3,7 +3,7 @@ import './LeftPanelStyle.css'
 import IconButton from '@mui/material/IconButton'
 import SendIcon from '@mui/icons-material/Send';
 import { db } from '../db/firebase-config'
-import { collection, getDocs, addDoc } from 'firebase/firestore'
+import { collection, getDocs, addDoc, deleteDoc, updateDoc, doc } from 'firebase/firestore'
 import Alert from '@mui/material/Alert';
 import Zoom from '@mui/material/Zoom';
 import CircularProgress from '@mui/material/CircularProgress';
@@ -12,31 +12,35 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import LogoutIcon from '@mui/icons-material/Logout';
 import MiniProfileCard from './MiniProfileCard';
 import RightPanel from './RightPanel';
+import GroupsIcon from '@mui/icons-material/Groups';
+import PersonAddAlt1Icon from '@mui/icons-material/PersonAddAlt1';
+import PersonRemoveIcon from '@mui/icons-material/PersonRemove';
+import CloseIcon from '@mui/icons-material/Close';
+import CheckIcon from '@mui/icons-material/Check';
+import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
+import CardFriends from './CardsFriends';
 
 function LeftPanel({ user, acesso }) {
 
   const messagesCollectionRef = collection(db, 'messages')
   const usersCollectionRef = collection(db, 'users')
+  const solicitacoesCollectionRef = collection(db, 'solicitacoes')
 
   const [messages, setMessages] = useState([])
   const [messageValue, setMessageValue] = useState('')
+  const [solicitacoes, setSolicitacoes] = useState([])
+  const [solicitacoesId, setSolicitacoesId] = useState([])
+  const [pedidos, setPedidos] = useState([])
+  const [pedidosId, setPedidosId] = useState([])
+  const [amigosId, setAmigosId] = useState([])
 
   const [userLogado, setUserLogado] = useState(user)
   const [uExposed, setUExposed] = useState(userLogado)
   const [users, setUsers] = useState([])
   const [alertMessage, setAlertMessage] = useState(false)
   const [timer, setTimer] = useState(false)
-  const [scene, setScene] = useState('')
-
-  useEffect(() => {
-    async function fetchData() {
-      const data = await getDocs(messagesCollectionRef)
-
-      setMessages(data.docs.map((message, k) => ({ ...message.data() })))
-    }
-    fetchData()
-  }, [timer])
-  //[timer]
+  const [scene, setScene] = useState('chat')
+  const [trigger, setTrigger] = useState(false)
 
   useEffect(() => {
     async function fetchData() {
@@ -50,19 +54,66 @@ function LeftPanel({ user, acesso }) {
           email: user.data().email,
           senha: user.data().senha,
           bio: user.data().bio,
-          img: user.data().img
+          img: user.data().img,
+          amigos: user.data().amigos ? user.data().amigos : []
         }
         arr.push(u)
       })
       setUsers(arr)
+      let arr1 = []
+      userLogado.amigos.map((a) => {
+        arr1.push(a)
+      })
+      setAmigosId(arr1)
     }
     fetchData()
-
-  }, [timer])
+  }, [trigger], [timer])
   //[timer], [messageValue]
+
+  useEffect(() => {
+    async function fetchData() {
+      const data = await getDocs(solicitacoesCollectionRef)
+
+      let arr1 = []
+      let arr2 = []
+      let arr3 = []
+      let arr4 = []
+      data.docs.map((s, k) => {
+        const sol = {
+          id: s.id,
+          origem: s.data().origem,
+          destino: s.data().destino,
+        }
+        if (sol.origem === userLogado.id) {
+          arr1.push(sol)
+          arr3.push(sol.destino)
+        }
+        if (sol.destino === userLogado.id) {
+          arr2.push(sol)
+          arr4.push(sol.origem)
+        }
+      })
+      setSolicitacoes(arr1)
+      setSolicitacoesId(arr3)
+      setPedidos(arr2)
+      setPedidosId(arr4)
+    }
+
+    fetchData()
+  }, [trigger], [timer])
+
+  useEffect(() => {
+    async function fetchData() {
+      const data = await getDocs(messagesCollectionRef)
+
+      setMessages(data.docs.map((message, k) => ({ ...message.data() })))
+    }
+    fetchData()
+  }, [timer])
+
   function organizeMessages() {
     messages.sort(function (a, b) {
-      if (a.hora._compareTo(b.hora) == 1) {
+      if (a.hora._compareTo(b.hora) === 1) {
         return -1
       } else {
         return true
@@ -91,16 +142,13 @@ function LeftPanel({ user, acesso }) {
       hora: new Date,
       valor: messageValue
     }
-
     await addDoc(messagesCollectionRef, newMessage)
-
-    await setTimer(!timer)
   }
 
   function userExposed(uE) {
+    setTrigger(!trigger)
     setUExposed(uE)
     setScene("exposed")
-
   }
 
   function formatData(m) {
@@ -112,11 +160,70 @@ function LeftPanel({ user, acesso }) {
   }
 
   function goChat() {
-    setScene('')
+    setScene('chat')
   }
 
   function goProfile() {
     setScene('profile')
+  }
+
+  function goFriends() {
+    setScene('friends')
+  }
+
+  async function addFriend(id) {
+    await addDoc(solicitacoesCollectionRef, { origem: userLogado.id, destino: id })
+    setTrigger(!trigger)
+  }
+
+  async function acceptSolicitation(userAcepted) {
+
+    let arr = userLogado.amigos
+    let arr1 = userAcepted.amigos
+
+    arr.push(userAcepted.id)
+    arr1.push(userLogado.id)
+
+    let uL = userLogado
+    let uA = userAcepted
+
+    uL.amigos = arr
+    uA.amigos = arr1
+
+    const userLogadoDoc = doc(db, 'users', userLogado.id)
+    await updateDoc(userLogadoDoc, uL)
+
+    const userAceptedDoc = doc(db, 'users', userAcepted.id)
+    await updateDoc(userAceptedDoc, uA)
+
+    await deleteInvite(userAcepted)
+
+    setTrigger(!trigger)
+  }
+
+  async function deleteSolicitation(userAcepted) {
+    const solicitation = solicitacoes.find(s => s.destino === userAcepted.id)
+    const solicitationDoc = doc(db, 'solicitacoes', solicitation.id)
+    await deleteDoc(solicitationDoc).then((e) => console.log("?")).catch((e) => console.log(e))
+    setTrigger(!trigger)
+  }
+
+  async function deleteInvite(userAcepted) {
+    const solicitation = pedidos.find(s => s.origem === userAcepted.id)
+    const solicitationDoc = doc(db, 'solicitacoes', solicitation.id)
+    await deleteDoc(solicitationDoc).then((e) => console.log("?")).catch((e) => console.log(e))
+    setTrigger(!trigger)
+  }
+
+  function refreshInvites() {
+    setTrigger(!trigger)
+  }
+
+  function refreshUser(u){
+    setUserLogado(u)
+    setUExposed(userExposed.id === u.id ? u : uExposed)
+    console.log(u);
+    setTrigger(!trigger)
   }
 
   return (
@@ -126,10 +233,9 @@ function LeftPanel({ user, acesso }) {
         {organizeMessages()}
         {setTimeout(() => {
           setTimer(!timer)
-        }, 5000)}
+        }, 2000)}
       </h5>
-
-      {scene !== "profile" && (
+      {scene !== "friends" && scene !== "profile" && (
         <div className="chat-container">
           <div className="profile-friend">
             <div className="card-perfil">
@@ -143,6 +249,39 @@ function LeftPanel({ user, acesso }) {
                   <p style={{ alignSelf: "flex-start" }}>Biografia</p>
                   <h3 style={{ wordBreak: "break-word" }} >{uExposed.bio ? uExposed.bio : "Este usuário não possui nenhuma Bio"}</h3>
                 </div>
+                {!pedidosId.includes(uExposed.id) && (
+                  uExposed.id !== userLogado.id && !userLogado.amigos.includes(uExposed.id) && (
+                    solicitacoesId.includes(uExposed.id) ? (
+                      <Fab variant="extended" color='error' size="medium" onClick={() => deleteSolicitation(uExposed)}>
+                        <PersonRemoveIcon />
+                        Cancelar Solicitação
+                      </Fab>
+                    ) : (
+                      <Fab variant="extended" color='success' size="medium" onClick={() => addFriend(uExposed.id)}>
+                        <PersonAddAlt1Icon />
+                        Adicionar aos amigos
+                      </Fab>
+                    )
+                  )
+                )}
+                {(pedidosId.includes(uExposed.id)) && (!userLogado.amigos.includes(uExposed.id)) && (
+                  <div className="optionsInvite">
+                    <Fab variant="extended" color='info' size="medium" onClick={() => acceptSolicitation(uExposed)}>
+                      <CheckIcon />
+                      Aceitar
+                    </Fab>
+                    <Fab variant="extended" color='error' size="medium" onClick={() => deleteSolicitation(uExposed)}>
+                      <CloseIcon />
+                      Recusar
+                    </Fab>
+                  </div>
+                )}
+                {userLogado.amigos.includes(uExposed.id) && (
+                  <div className='amigos' style={{ alignSelf: 'flex-end' }}>
+                    <PeopleAltIcon />
+                    Amigos
+                  </div>
+                )}
               </div>
             </div>
           </div>
@@ -153,27 +292,32 @@ function LeftPanel({ user, acesso }) {
                 <LogoutIcon />
                 Sair
               </Fab>
+              <Fab variant="extended" color="secondary" size="medium" aria-label="add" onClick={goFriends}>
+                <GroupsIcon />
+                Amigos
+              </Fab>
               <Fab variant="extended" size="medium" aria-label="add" onClick={goProfile}>
                 <AccountCircleIcon />
                 Perfil
               </Fab>
+
             </div>
+
             {scene === "exposed" && (
-              <MiniProfileCard user={uExposed} back={goChat} />
+              <MiniProfileCard deleteSolicitation={deleteSolicitation} userLogado={userLogado} user={uExposed} back={goChat} solicitations={solicitacoesId} invites={pedidosId} addUser={addFriend} cancelSolicitation={deleteInvite} acceptSolicitation={acceptSolicitation} updateInvites={refreshInvites} />
             )}
+
             {alertMessage && (
-                <Zoom in={alertMessage} style={{ transitionDelay: alertMessage ? '0ms' : '0ms' }}>
-                  <Alert variant="filled" severity="error" Tran>
-                    Digite o corpo da mensagem
-                  </Alert>
-                </Zoom>
-              )}
+              <Zoom in={alertMessage} style={{ transitionDelay: alertMessage ? '0ms' : '0ms' }}>
+                <Alert variant="filled" severity="error" Tran>
+                  Digite o corpo da mensagem
+                </Alert>
+              </Zoom>
+            )}
             <div className="view-messages">
               {!messages[0] && (
                 <CircularProgress size={100} style={!messages[0] ? { alignSelf: "center" } : { alignSelf: "center", display: "none" }} />
               )}
-
-              
               {messages.length > 0 && (
                 messages.map((m, k) => (
                   <div key={k} className="message" onClick={() => userExposed(autorName(m))} style={m.autor === userLogado.email ? { alignSelf: "flex-end", borderRadius: "6px 0px 6px 6px", backgroundColor: "rgba(255, 255, 255, 0.677)" } : { color: "white" }}>
@@ -197,7 +341,11 @@ function LeftPanel({ user, acesso }) {
         </div>
       )}
       {scene === 'profile' && (
-        <RightPanel className="right" user={userLogado} goBack={goChat} />
+        <RightPanel refreshUser={refreshUser} className="right" user={userLogado} goBack={goChat} />
+      )}
+
+      {scene === 'friends' && (
+        <CardFriends changeScene={goChat} userLogado={userLogado} users={users} acesso={true} />
       )}
     </div>
   )

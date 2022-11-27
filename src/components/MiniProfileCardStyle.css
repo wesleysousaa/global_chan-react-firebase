@@ -6,16 +6,32 @@
     align-items: center;
     z-index: 0;
     align-self: center;
+    width: 100%;
 }
 
 .picture-profile-select {
     width: 30%;
-    min-width: 30%;
-    border: solid 3px black;
+    height: 30%;
+    min-width: 40%;
+    border: solid 2px black;
+    border-radius: 10em;
+    height: fit-content;
+}
+
+.info-profile{
+    display: flex;
+    width: fit-content;
+    justify-content: space-between;
+
 }
 
 .name {
     margin: 0px;
+}
+
+.add-recuse{
+    margin-top: 1em;
+    margin-bottom: 1em;
 }
 
 .itens {
@@ -24,6 +40,12 @@
     justify-content: flex-start;
     width: fit-content;
     align-self: center;
+    align-items: center;
+    
+}
+
+.img-name-bio{
+    display: flex;
 }
 
 .nav {
@@ -36,10 +58,35 @@
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
+    padding-left: 0.5em;
+    word-break: break-all;
+}
+
+.amigos{
+    display: flex;
+    padding: 0.5em;
+    background-color: rgb(0, 214, 214);
+    height: fit-content;
+    border-radius: 6px 0px 0px 6px;
+    border-right: solid 2px black;
+}
+
+.bts-invitation{
+    display: flex;
+    align-items: center;
+    align-self: center;
+    margin-bottom: 1em;
+    margin-top: 1em;
 }
 
 @media (min-width: 1130px) {
     .mini-profile-container {
         display: none;
+    }
+}
+
+@media (max-width: 880px) {
+    .itens {
+      flex-direction: column;  
     }
 }
