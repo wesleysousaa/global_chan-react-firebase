@@ -67,7 +67,7 @@ function RightPanel({ user, acesso, goBack, users, refreshUser }) {
 
     userUpadated.id = userUp.id
     setUserUp(userUpadated)
-    refreshUser(userUpadated)
+    //refreshUser(userUpadated)
   }
 
   function exit() {
