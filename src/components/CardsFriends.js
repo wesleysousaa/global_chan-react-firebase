@@ -44,9 +44,9 @@ function CardFriends({ changeScene, userLogado, users, acesso }) {
       selectUsers(arr)
 
     }
-
+    console.log("atualiozou")
     fetchData()
-  }, [trigger], [scene], [timer])
+  },  [timer])
 
   function selectUsers(solicitacoesId) {
     let arr = []
@@ -114,7 +114,7 @@ function CardFriends({ changeScene, userLogado, users, acesso }) {
       <div style={{ display: "none" }}>
         {setTimeout(() => {
           setTimer(!timer)
-        }, 1000)}
+        }, 5000)}
       </div>
       {scene === 'friends' && (
         <>

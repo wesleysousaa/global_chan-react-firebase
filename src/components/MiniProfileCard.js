@@ -39,7 +39,7 @@ function MiniProfileCard({ user, back, solicitations, invites, addUser, cancelSo
                 }
             })
         }
-
+        
         fetchData()
     }, [timer])
 
