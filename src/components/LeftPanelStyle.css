@@ -2,6 +2,12 @@
     width: 0em;
 }
 
+.floating-theme-button{
+    display: fixed;
+    float: left;
+    background-color: rgb(50, 49, 49);
+}
+
 .chat-container {
     background-image: linear-gradient(rgba(0, 0, 0, 0.518), rgba(0, 0, 0, 0.37));
     height: 80%;

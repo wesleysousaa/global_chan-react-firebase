@@ -7,7 +7,7 @@ import Zoom from '@mui/material/Zoom';
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import CardFriends from './CardsFriends';
 
-function RightPanel({ user, acesso, goBack, users, refreshUser }) {
+function RightPanel({ theme , user, acesso, goBack, users}) {
   const storage = getStorage()
 
   const [scene, setScene] = useState("home")
@@ -132,8 +132,8 @@ function RightPanel({ user, acesso, goBack, users, refreshUser }) {
               Dados alterados com Sucesso
             </Alert>
           </Zoom>
-
-          <form className="forms" onSubmit={(e) => updateUser(e)} >
+        {console.log(theme)}
+          <form className="forms" onSubmit={(e) => updateUser(e)} style={theme ? {backgroundColor:"rgba(50, 49, 49, 0.413)", backgroundImage:"none", color:"white"} : {}}>
             <h1 style={{ marginBottom: "0px" }}>Alterar dados</h1>
             <h2 style={mensagem === "Sucesso!" ? { color: "green" } : { color: "red" }}>{mensagem}</h2>
             <label className='labels'>

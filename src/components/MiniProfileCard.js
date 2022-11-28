@@ -8,7 +8,7 @@ import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
 import { collection, getDocs, } from 'firebase/firestore'
 import { db } from '../db/firebase-config';
 
-function MiniProfileCard({ user, back, solicitations, invites, addUser, cancelSolicitation, acceptSolicitation, userLogado, deleteSolicitation }) {
+function MiniProfileCard({ theme, user, back, solicitations, invites, addUser, cancelSolicitation, acceptSolicitation, userLogado, deleteSolicitation }) {
     const solicitacoesCollectionRef = collection(db, 'solicitacoes')
     const usersCollenctionRef = collection(db, 'users')
 
@@ -39,7 +39,7 @@ function MiniProfileCard({ user, back, solicitations, invites, addUser, cancelSo
                 }
             })
         }
-        
+
         fetchData()
     }, [timer])
 
@@ -64,18 +64,17 @@ function MiniProfileCard({ user, back, solicitations, invites, addUser, cancelSo
     }, [timer])
 
     return (
-        <div className='mini-profile-container'>
+        <div className='mini-profile-container' >
             <div style={{ display: "none" }}>
                 {setTimeout(() => {
                     setTimer(!timer)
                 }, 5000)}
             </div>
-
-            <div className="itens">
+            <div className="itens" style={theme ? {color:"white"} : {color:"black"}}>
                 <div className='info-profile'>
-                    <div className="img-name-bio">
+                    <div className="img-name-bio" >
                         <img src={user.img} alt="foto-perfil" className='picture-profile-select' />
-                        <div className="group-name">
+                        <div className="group-name" >
                             <span>
                                 <p style={{ justifyContent: "start" }}>Nome</p>
                                 <h2 className='name'>{user.nome}</h2>
@@ -88,7 +87,7 @@ function MiniProfileCard({ user, back, solicitations, invites, addUser, cancelSo
                     </div>
 
                     {userLogadoA.amigos.includes(user.id) && (
-                        <div className='amigos'>
+                        <div className='amigos' style={theme ? {backgroundColor:"#ed6c02", color:"white"} : {}}>
                             <PeopleAltIcon />
                             Amigo
                         </div>

@@ -8,6 +8,8 @@ import CircularProgress from '@mui/material/CircularProgress';
 
 function App() {
   
+  const [theme, setTheme] = useState(false)
+
   const [newEmail, setNewEmail] = useState("")
   const [newSenha, setNewSenha] = useState("")
   const [newNome, setNewNome] = useState("")
@@ -125,6 +127,10 @@ function App() {
     setUserLogado(u)
   }
 
+  function uploadTheme(t) {
+    setTheme(t)
+  }
+
   return (
     <div className="m" style={!users ? {display: "flex", alignItems:"center", justifyContent:"center"} : {}}>
       {!users && (
@@ -134,8 +140,8 @@ function App() {
       {users && (
         userLogado ? (
           <div className="App">
-            <LeftPanel className="left" user={userLogado} acesso={changeScene} />
-            <RightPanel className="right" user={userLogado} acesso={changeScene} users={users} userUpadated={refreshUser}/>
+            <LeftPanel  className="left" uploadTheme={uploadTheme} user={userLogado} acesso={changeScene} />
+            <RightPanel className="right"  theme={theme} user={userLogado} acesso={changeScene} users={users} userUpadated={refreshUser}/>
           </div>
         ):(
             scene === "login" ? (

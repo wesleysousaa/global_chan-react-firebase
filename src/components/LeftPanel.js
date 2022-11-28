@@ -20,9 +20,13 @@ import CheckIcon from '@mui/icons-material/Check';
 import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
 import CardFriends from './CardsFriends';
 import Badge from '@mui/material/Badge';
+import Brightness4Icon from '@mui/icons-material/Brightness4';
+import Brightness7Icon from '@mui/icons-material/Brightness7';
 
-function LeftPanel({ user, acesso }) {
 
+function LeftPanel({ user, acesso, uploadTheme }) {
+
+  const [theme, setTheme] = useState(false)
   const messagesCollectionRef = collection(db, 'messages')
   const usersCollectionRef = collection(db, 'users')
   const solicitacoesCollectionRef = collection(db, 'solicitacoes')
@@ -103,7 +107,7 @@ function LeftPanel({ user, acesso }) {
       setSolicitacoesId(arr3)
       setPedidos(arr2)
       setPedidosId(arr4)
-      
+
     }
     fetchData()
     console.log("soliçitações");
@@ -233,6 +237,11 @@ function LeftPanel({ user, acesso }) {
     setTrigger(!trigger)
   }
 
+  function changeTheme(){
+    uploadTheme(!theme)
+    setTheme(!theme)
+  }
+
   return (
 
     <div className='left'>
@@ -245,14 +254,14 @@ function LeftPanel({ user, acesso }) {
       {scene !== "friends" && scene !== "profile" && (
         <div className="chat-container">
           <div className="profile-friend">
-            <div className="card-perfil">
+            <div className="card-perfil" style={theme ? {backgroundColor:"rgb(50, 49, 49)"} : {}}>
               <img className='picture-profile' src={uExposed.img} alt="perfil" />
-              <div className="ballon-profile" style={{ flexDirection: "column" }}>
-                <div className="nome" style={{ alignSelf: "flex-start" }}>
+              <div className="ballon-profile" style={theme ? {backgroundColor:"rgb(50, 49, 49)", flexDirection: "column"} : {flexDirection: "column"}}>
+                <div className="nome" style={theme ? { alignSelf: "flex-start", color:"white", backgroundColor:"rgb(50, 49, 49)", borderColor:"#ed6c02" } : {alignSelf: "flex-start"}}>
                   <p style={{ float: "left" }}>Nome</p>
                   <h1>{uExposed.nome}</h1>
                 </div>
-                <div className="bio" style={{ wordWrap: "break-word", color: "black" }}>
+                <div className="bio" style={theme ? { wordWrap: "break-word" } : {color:"black"}}>
                   <p style={{ alignSelf: "flex-start" }}>Biografia</p>
                   <h3 style={{ wordBreak: "break-word" }} >{uExposed.bio ? uExposed.bio : "Este usuário não possui nenhuma Bio"}</h3>
                 </div>
@@ -293,7 +302,7 @@ function LeftPanel({ user, acesso }) {
             </div>
           </div>
 
-          <div className="chat">
+          <div className="chat" style={theme ? {backgroundColor:"rgb(50, 49, 49)"}:{backgroundColor:"white"}}>
             <div className="navigation-group">
               <Fab variant="extended" color='error' size="medium" aria-label="add" onClick={exit}>
                 <LogoutIcon />
@@ -313,7 +322,7 @@ function LeftPanel({ user, acesso }) {
             </div>
 
             {scene === "exposed" && (
-              <MiniProfileCard deleteSolicitation={deleteSolicitation} userLogado={userLogado} user={uExposed} back={goChat} solicitations={solicitacoesId} invites={pedidosId} addUser={addFriend} cancelSolicitation={deleteInvite} acceptSolicitation={acceptSolicitation} updateInvites={refreshInvites} />
+              <MiniProfileCard theme={theme} deleteSolicitation={deleteSolicitation} userLogado={userLogado} user={uExposed} back={goChat} solicitations={solicitacoesId} invites={pedidosId} addUser={addFriend} cancelSolicitation={deleteInvite} acceptSolicitation={acceptSolicitation} updateInvites={refreshInvites} />
             )}
 
             {alertMessage && (
@@ -336,12 +345,15 @@ function LeftPanel({ user, acesso }) {
                   </div>
                 ))
               )}
-
+              <Fab color="inherit" aria-label="add" className='floating-theme-button' style={{position:"fixed", margin:"5px", backgroundColor:"rgba(255, 255, 255, 0.243)"}} onClick={changeTheme}>
+              {theme ? <Brightness7Icon /> : <Brightness4Icon />}
+              
+              </Fab>
             </div>
             <form className='form-chat' onSubmit={(e) => sendMessage(e)}>
               <div className="chat-input-group">
-                <input onChange={(e) => setMessageValue(e.target.value)} value={messageValue} type="text" name="mensagem" className='menssage-input' />
-                <IconButton onClick={sendMessage}>
+                <input style={theme ? {color:"white"} : {}} onChange={(e) => setMessageValue(e.target.value)} value={messageValue} type="text" name="mensagem" className='menssage-input' />
+                <IconButton onClick={sendMessage} color={theme ? "warning" : "success"}>
                   <SendIcon fontSize='medium' style={{ padding: "0px" }}></SendIcon>
                 </IconButton>
               </div>
@@ -350,7 +362,7 @@ function LeftPanel({ user, acesso }) {
         </div>
       )}
       {scene === 'profile' && (
-        <RightPanel refreshUser={refreshUser} className="right" user={userLogado} goBack={goChat} />
+        <RightPanel theme={theme} refreshUser={refreshUser} className="right" user={userLogado} goBack={goChat} />
       )}
 
       {scene === 'friends' && (

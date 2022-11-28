@@ -79,7 +79,7 @@
   width: 100%;
   border-style: none;
   border-bottom: solid 1px;
-
+  color: inherit;
 }
 
 .confirm-button,
@@ -183,6 +183,9 @@
   justify-content: space-between;
 }
 
+.right-smartphone{
+  
+}
 @media (max-width: 670px) {
   .left {
     width: 100%;
