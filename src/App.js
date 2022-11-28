@@ -149,7 +149,7 @@ function App() {
                   </label>
                   <label className="labels">
                     Senha
-                    <input value={senha} style={mensagemLogin === "Senha inválida" || mensagemLogin === "Campos Obrigatórios" && email.trim() === "" ? { color: "red", borderColor: "red" } : {}} className="inputs" type="password" name="Senha" onChange={(e) => setSenha(e.target.value)} />
+                    <input value={senha} style={mensagemLogin === "Senha inválida" || mensagemLogin === "Campos Obrigatórios" && senha.trim() === "" ? { color: "red", borderColor: "red" } : {}} className="inputs" type="password" name="Senha" onChange={(e) => setSenha(e.target.value)} />
                   </label>
                   <input type="submit" value="Entrar" className="confirm-button" />
                 </form>
@@ -166,15 +166,15 @@ function App() {
                     </label>
                     <label className="labels">
                       Email
-                      <input value={newEmail} style={newEmail.trim().length === 0 && mensagemCadastro === "Campo obrigatório" || mensagemCadastro === "Email já cadastrado" ? { color: "red", borderColor: "red" } : {}} className="inputs" placeholder="fulano@gmail.com" type="text" onChange={(e) => setNewEmail(e.target.value)} />
+                      <input value={newEmail} style={(newEmail.trim().length === 0) && (mensagemCadastro === "Campo obrigatório") || (mensagemCadastro === "Email já cadastrado") ? { color: "red", borderColor: "red" } : {}} className="inputs" placeholder="fulano@gmail.com" type="text" onChange={(e) => setNewEmail(e.target.value)} />
                     </label>
                     <label className="labels">
                       Senha
-                      <input value={newSenha} style={newSenha.trim().length === 0 && mensagemCadastro !== "" ? { color: "red", borderColor: "red" } : {}} className="inputs" type="password" name="Senha" onChange={(e) => setNewSenha(e.target.value)} />
+                      <input value={newSenha} style={(newSenha.trim().length === 0) && (mensagemCadastro !== "") ? { color: "red", borderColor: "red" } : {}} className="inputs" type="password" name="Senha" onChange={(e) => setNewSenha(e.target.value)} />
                     </label>
                     <label className="labels">
                       Biografia
-                      <input maxLength={50} value={newBio} style={newBio.trim().length === 0 && mensagemCadastro === "Campo obrigatório" ? { color: "red", borderColor: "red" } : {}} className="inputs" type="text" name="Senha" onChange={(e) => setNewBio(e.target.value)} />
+                      <input maxLength={50} value={newBio} style={(newBio.trim().length === 0) && (mensagemCadastro === "Campo obrigatório") ? { color: "red", borderColor: "red" } : {}} className="inputs" type="text" name="Senha" onChange={(e) => setNewBio(e.target.value)} />
                     </label>
                     <div className="bts">
                       <input type="button" value="Voltar" className="cancel-button" onClick={changeScene} />

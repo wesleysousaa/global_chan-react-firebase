@@ -58,6 +58,9 @@ function LeftPanel({ user, acesso }) {
           amigos: user.data().amigos ? user.data().amigos : []
         }
         arr.push(u)
+        if(userLogado.id === u.id){
+          setUserLogado(u)
+        }
       })
       setUsers(arr)
       let arr1 = []
