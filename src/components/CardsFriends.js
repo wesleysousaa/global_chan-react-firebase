@@ -18,15 +18,14 @@ function CardFriends({ changeScene, userLogado, users, acesso }) {
   const [scene, setScene] = useState('friends')
   const [usersInvited, setUsersInvited] = useState([])
   const [solicitacoes, setSolicitacoes] = useState([])
-  const [solicitacoesId, setSolicitacoesId] = useState([])
+  const [timer, setTimer] = useState(false)
+
 
   useEffect(() => {
     let arr = []
     let arr1 = []
     async function fetchData() {
       const data = await getDocs(solicitacoesCollectionRef)
-
-
 
       await data.docs.map((s, k) => {
         const sol = {
@@ -47,27 +46,17 @@ function CardFriends({ changeScene, userLogado, users, acesso }) {
     }
 
     fetchData()
-  }, [trigger], [scene])
+  }, [trigger], [scene], [timer])
 
   function selectUsers(solicitacoesId) {
     let arr = []
     let arr1 = []
 
-    // console.log(solicitacoesId)
-    // console.log(users)
     arr = users.filter(u => userLogado.amigos.includes(u.id))
     arr1 = users.filter(u => solicitacoesId.includes(u.id))
-    // users.forEach(u => {
-    //   if (userLogado.amigos.includes(u.id)) {
-    //     arr.push(u)
-    //   }
-    //   if (solicitacoesId.includes(u.id)) {
-    //     arr1.push(u)
-    //   }
-    // })
+
     setFriendsObj(arr)
     setUsersInvited(arr1)
-    //console.log(solicitacoesId)
   }
 
   async function removeFriend(friend) {
@@ -122,6 +111,11 @@ function CardFriends({ changeScene, userLogado, users, acesso }) {
 
   return (
     <div className={acesso ? 'friends-smartphone' : 'friends'}>
+      <div style={{ display: "none" }}>
+        {setTimeout(() => {
+          setTimer(!timer)
+        }, 1000)}
+      </div>
       {scene === 'friends' && (
         <>
           <div className='header-cards-friends'>
