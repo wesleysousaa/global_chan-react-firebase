@@ -19,6 +19,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import CheckIcon from '@mui/icons-material/Check';
 import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
 import CardFriends from './CardsFriends';
+import Badge from '@mui/material/Badge';
 
 function LeftPanel({ user, acesso }) {
 
@@ -58,7 +59,7 @@ function LeftPanel({ user, acesso }) {
           amigos: user.data().amigos ? user.data().amigos : []
         }
         arr.push(u)
-        if(userLogado.id === u.id){
+        if (userLogado.id === u.id) {
           setUserLogado(u)
         }
       })
@@ -70,7 +71,8 @@ function LeftPanel({ user, acesso }) {
       setAmigosId(arr1)
     }
     fetchData()
-  }, [trigger], [timer])
+    console.log("users");
+  }, [timer])
   //[timer], [messageValue]
 
   useEffect(() => {
@@ -81,6 +83,7 @@ function LeftPanel({ user, acesso }) {
       let arr2 = []
       let arr3 = []
       let arr4 = []
+
       data.docs.map((s, k) => {
         const sol = {
           id: s.id,
@@ -100,18 +103,19 @@ function LeftPanel({ user, acesso }) {
       setSolicitacoesId(arr3)
       setPedidos(arr2)
       setPedidosId(arr4)
+      
     }
-
     fetchData()
-  }, [trigger], [timer])
+    console.log("soliçitações");
+  }, [timer])
 
   useEffect(() => {
     async function fetchData() {
       const data = await getDocs(messagesCollectionRef)
-
       setMessages(data.docs.map((message, k) => ({ ...message.data() })))
     }
     fetchData()
+    console.log("mensagem");
   }, [timer])
 
   function organizeMessages() {
@@ -222,7 +226,7 @@ function LeftPanel({ user, acesso }) {
     setTrigger(!trigger)
   }
 
-  function refreshUser(u){
+  function refreshUser(u) {
     setUserLogado(u)
     setUExposed(userExposed.id === u.id ? u : uExposed)
     console.log(u);
@@ -236,7 +240,7 @@ function LeftPanel({ user, acesso }) {
         {organizeMessages()}
         {setTimeout(() => {
           setTimer(!timer)
-        }, 2000)}
+        }, 3000)}
       </h5>
       {scene !== "friends" && scene !== "profile" && (
         <div className="chat-container">
@@ -282,7 +286,7 @@ function LeftPanel({ user, acesso }) {
                 {userLogado.amigos.includes(uExposed.id) && (
                   <div className='amigos' style={{ alignSelf: 'flex-end' }}>
                     <PeopleAltIcon />
-                    Amigos
+                    Amigo
                   </div>
                 )}
               </div>
@@ -296,8 +300,10 @@ function LeftPanel({ user, acesso }) {
                 Sair
               </Fab>
               <Fab variant="extended" color="secondary" size="medium" aria-label="add" onClick={goFriends}>
-                <GroupsIcon />
-                Amigos
+                <Badge badgeContent={pedidos.length} color="error">
+                  <GroupsIcon />
+                  Amigos
+                </Badge>
               </Fab>
               <Fab variant="extended" size="medium" aria-label="add" onClick={goProfile}>
                 <AccountCircleIcon />
