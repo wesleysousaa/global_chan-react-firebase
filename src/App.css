@@ -198,3 +198,13 @@
     display: none;
   }
 }
+@media (max-height: 600px){
+  .forms{
+    height: 70%;
+    width: 50%;
+    font-size: 2em;
+  }
+  h1{
+    margin: 0px;
+  }
+}
