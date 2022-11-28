@@ -12,14 +12,15 @@ import Badge from '@mui/material/Badge';
 function CardFriends({ changeScene, userLogado, users, acesso }) {
 
   const solicitacoesCollectionRef = collection(db, 'solicitacoes')
+  const usersCollectionRef = collection(db, 'users')
 
   const [friendsObj, setFriendsObj] = useState([])
-  const [trigger, setTrigger] = useState(false)
   const [scene, setScene] = useState('friends')
   const [usersInvited, setUsersInvited] = useState([])
   const [solicitacoes, setSolicitacoes] = useState([])
   const [timer, setTimer] = useState(false)
-
+  const [userL, setUserL] = useState(userLogado)
+  const [usersL, setUsersL] = useState(users)
 
   useEffect(() => {
     let arr = []
@@ -27,7 +28,7 @@ function CardFriends({ changeScene, userLogado, users, acesso }) {
     async function fetchData() {
       const data = await getDocs(solicitacoesCollectionRef)
 
-      await data.docs.map((s, k) => {
+      data.docs.map((s, k) => {
         const sol = {
           id: s.id,
           origem: s.data().origem,
@@ -38,25 +39,57 @@ function CardFriends({ changeScene, userLogado, users, acesso }) {
           arr1.push(sol)
           arr.push(sol.origem)
         }
-      })
 
+      })
       setSolicitacoes(arr1)
       selectUsers(arr)
-
     }
-    console.log("atualiozou")
     fetchData()
-  },  [timer])
+  }, [timer])
+
+  useEffect(() => {
+    let arr = []
+    async function fetchData() {
+      const data = await getDocs(usersCollectionRef)
+
+      data.docs.map((s, k) => {
+        const u = {
+          id: s.id,
+          nome: s.data().nome,
+          email: s.data().email,
+          bio: s.data().bio,
+          img: s.data().img,
+          amigos: s.data().amigos,
+          senha: s.data().senha
+        }
+
+        if (u.id === userLogado.id) {
+          setUserL(u)
+        }
+        arr.push(u)
+      })
+      setUsersL(arr)
+      selectUsers()
+      console.log("1")
+      console.log(friendsObj)
+    }
+    fetchData()
+  }, [timer])
 
   function selectUsers(solicitacoesId) {
     let arr = []
     let arr1 = []
 
-    arr = users.filter(u => userLogado.amigos.includes(u.id))
-    arr1 = users.filter(u => solicitacoesId.includes(u.id))
+    console.log("2")
+    console.log(userL)
 
+    arr = usersL.filter(u => userL.amigos.includes(u.id))
+
+    if (solicitacoesId) {
+      arr1 = usersL.filter(u => solicitacoesId.includes(u.id))
+      setUsersInvited(arr1)
+    }
     setFriendsObj(arr)
-    setUsersInvited(arr1)
   }
 
   async function removeFriend(friend) {
@@ -74,14 +107,14 @@ function CardFriends({ changeScene, userLogado, users, acesso }) {
     const FriendDoc = doc(db, 'users', friend.id)
     await updateDoc(FriendDoc, friend)
 
-    setTrigger(!trigger)
+    setUserL(userLogado)
+    selectUsers()
   }
 
   async function cancelSolicitation(u) {
     const solicitation = solicitacoes.find(s => s.origem === u.id)
     const solicitationDoc = doc(db, "solicitacoes", solicitation.id)
     await deleteDoc(solicitationDoc)
-    setTrigger(!trigger)
   }
 
   async function acceptSolicitation(userAcepted) {
@@ -105,8 +138,6 @@ function CardFriends({ changeScene, userLogado, users, acesso }) {
     await updateDoc(userAceptedDoc, uA)
 
     await cancelSolicitation(userAcepted)
-
-    setTrigger(!trigger)
   }
 
   return (
@@ -114,7 +145,7 @@ function CardFriends({ changeScene, userLogado, users, acesso }) {
       <div style={{ display: "none" }}>
         {setTimeout(() => {
           setTimer(!timer)
-        }, 5000)}
+        }, 3000)}
       </div>
       {scene === 'friends' && (
         <>
