@@ -3,7 +3,7 @@
 }
 
 .m {
-  background-image: url("https://static.vecteezy.com/ti/vetor-gratis/p1/2909370-luxo-abstrato-banner-fundo-moderno-formas-geometricas-e-ouro-linha-arte-papel-de-parede-design-para-site-impressoes-capa-fundo-parede-arte-e-decoracao-de-parede-vetor.jpg");
+  background-image: url("https://images5.alphacoders.com/711/711093.jpg");
   background-repeat: no-repeat;
   background-size: cover;
   height: 100vh;
@@ -62,7 +62,7 @@
   display: flex;
   flex-direction: column;
   padding: 5vh;
-  background-image: linear-gradient(rgba(255, 255, 255, 0.664), rgba(255, 255, 255, 0.35));
+  background-color: rgba(255, 255, 255, 0.664);
   border-radius: 6px;
 }
 
