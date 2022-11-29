@@ -286,7 +286,7 @@ function LeftPanel({ user, acesso, uploadTheme }) {
                       <CheckIcon />
                       Aceitar
                     </Fab>
-                    <Fab variant="extended" color='error' size="medium" onClick={() => deleteSolicitation(uExposed)}>
+                    <Fab variant="extended" color='error' size="medium" onClick={() => deleteInvite(uExposed)}>
                       <CloseIcon />
                       Recusar
                     </Fab>
