@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import './App.css';
-import { db } from './db/firebase-config'
-import { collection, getDocs, addDoc } from 'firebase/firestore'
+import RegisterUser from './services/RegisterUser';
+import FetchUsers from './services/FetchUsers'
 import LeftPanel from './components/LeftPanel'
 import RightPanel from './components/RightPanel'
 import CircularProgress from '@mui/material/CircularProgress';
@@ -23,33 +23,21 @@ function App() {
   const [mensagemCadastro, setMensagemCadastro] = useState("")
 
   const [emails, setEmails] = useState([])
-  const [users, setUsers] = useState()
+  const [users, setUsers] = useState([])
   const [userLogado, setUserLogado] = useState()
   const [scene, setScene] = useState("login")
 
   const [recent, setRecent] = useState(false)
 
-  const usersCollectionRef = collection(db, 'users')
 
   useEffect(() => {
     async function fetchData() {
-      const data = await getDocs(usersCollectionRef)
-
+      setUsers(await FetchUsers())
       let arr = []
-      data.docs.map((user, k) => {
-        const u = {
-          id: user.id,
-          nome: user.data().nome,
-          email: user.data().email,
-          senha: user.data().senha,
-          bio: user.data().bio,
-          img: user.data().img,
-          amigos: user.data().amigos ? user.data().amigos : []
-        }
-        arr.push(u)
-        emails.push(u.email)
+      await users.forEach(u => {
+        arr.push(u.email)
       })
-      setUsers(arr)
+      setEmails(arr)
     }
     fetchData()
   }, [userLogado], [scene])
@@ -96,7 +84,6 @@ function App() {
       return
     }
 
-
     const newUser = {
       email: newEmail,
       nome: newNome,
@@ -105,7 +92,7 @@ function App() {
       img: "https://firebasestorage.googleapis.com/v0/b/chanproject-f6e42.appspot.com/o/images-profile%2Fdefault-user.png?alt=media&token=e9d896cc-bcfd-4d18-9fdc-f3ead380cc18"
     }
 
-    await addDoc(usersCollectionRef, newUser)
+    await RegisterUser(newUser)
     setRecent(!recent)
     setUserLogado(newUser)
     

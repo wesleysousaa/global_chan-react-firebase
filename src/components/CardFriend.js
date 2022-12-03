@@ -1,7 +1,9 @@
 import React from 'react'
+import './CardFriendStyle.css'
+
+// MUI Features
 import PersonRemoveIcon from '@mui/icons-material/PersonRemove';
 import Fab from '@mui/material/Fab';
-import './CardFriendStyle.css'
 
 function CardFriend({amigo, removeUser}) {
 

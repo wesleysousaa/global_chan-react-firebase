@@ -1,14 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import './RightPanelStyle.css';
-import { db } from '../db/firebase-config';
-import { doc, updateDoc, getDocs, collection } from "firebase/firestore";
+
+// MUI features
 import Alert from '@mui/material/Alert';
 import Zoom from '@mui/material/Zoom';
-import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
+
+// Outros componentes
 import CardFriends from './CardsFriends';
 
+// Services
+import UpdateUser from '../services/UpdateUser'
+import UploadImage from '../services/UploadImage'
+
 function RightPanel({ theme , user, acesso, goBack, users}) {
-  const storage = getStorage()
 
   const [scene, setScene] = useState("home")
   const [mensagem, setMensagem] = useState('')
@@ -53,10 +57,7 @@ function RightPanel({ theme , user, acesso, goBack, users}) {
       setMensagem("Senha deve conter pelomenos 8 caracteres")
       return
     }
-
-    const userDoc = doc(db, 'users', userUp.id)
-
-    await updateDoc(userDoc, userUpadated)
+    await UpdateUser(userUp.id, userUpadated)
 
     setMensagem("")
     setAlertTime(true)
@@ -67,7 +68,6 @@ function RightPanel({ theme , user, acesso, goBack, users}) {
 
     userUpadated.id = userUp.id
     setUserUp(userUpadated)
-    //refreshUser(userUpadated)
   }
 
   function exit() {
@@ -75,23 +75,13 @@ function RightPanel({ theme , user, acesso, goBack, users}) {
   }
 
   async function uploadImage() {
-
     if (img) {
-      const imageRef = ref(storage, "images-profile/" + id)
-
-      await uploadBytes(imageRef, img).then((snapshot) => {
-      })
-
-      const url = await getDownloadURL(imageRef).then((url) => {
-        return url
-      })
-
+      const url = await UploadImage(img, id)
       setImgURL(url)
-      return url
+      return imgURL
     }
     return user.img
   }
-
 
   return (
     <div className={acesso ? "right" : "right-smartphone"}>
@@ -132,7 +122,6 @@ function RightPanel({ theme , user, acesso, goBack, users}) {
               Dados alterados com Sucesso
             </Alert>
           </Zoom>
-        {console.log(theme)}
           <form className="forms" onSubmit={(e) => updateUser(e)} style={theme ? {backgroundColor:"rgba(50, 49, 49, 0.413)", backgroundImage:"none", color:"white"} : {}}>
             <h1 style={{ marginBottom: "0px" }}>Alterar dados</h1>
             <h2 style={mensagem === "Sucesso!" ? { color: "green" } : { color: "red" }}>{mensagem}</h2>

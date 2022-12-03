@@ -1,18 +1,24 @@
 import React, { useEffect, useState } from 'react'
 import './CardFriendsStyle.css'
-import { getDocs, collection, updateDoc, doc, deleteDoc } from 'firebase/firestore'
+
+// Outros Componentes
 import CardFriend from './CardFriend'
-import { db } from '../db/firebase-config'
+
+// MUI features
 import Fab from '@mui/material/Fab';
 import PersonAddAlt1Icon from '@mui/icons-material/PersonAddAlt1';
 import ClearIcon from '@mui/icons-material/Clear';
 import CheckIcon from '@mui/icons-material/Check';
 import Badge from '@mui/material/Badge';
 
-function CardFriends({ changeScene, userLogado, users, acesso }) {
+// Services
+import AcceptSolicitation from '../services/AcceptSolicitation'
+import DeleteSolicitation from '../services/DeleteSolicitation'
+import RemoveFriend from '../services/RemoveFriend'
+import FetchUsers from '../services/FetchUsers'
+import FetchSolicitations from '../services/FetchSolicitations'
 
-  const solicitacoesCollectionRef = collection(db, 'solicitacoes')
-  const usersCollectionRef = collection(db, 'users')
+function CardFriends({ changeScene, userLogado, users, acesso }) {
 
   const [friendsObj, setFriendsObj] = useState([])
   const [scene, setScene] = useState('friends')
@@ -26,21 +32,15 @@ function CardFriends({ changeScene, userLogado, users, acesso }) {
     let arr = []
     let arr1 = []
     async function fetchData() {
-      const data = await getDocs(solicitacoesCollectionRef)
+      const data = await FetchSolicitations()
 
-      data.docs.map((s, k) => {
-        const sol = {
-          id: s.id,
-          origem: s.data().origem,
-          destino: s.data().destino,
+      data.map((s, k) => {
+        if (s.destino === userLogado.id) {
+          arr1.push(s)
+          arr.push(s.origem)
         }
-
-        if (sol.destino === userLogado.id) {
-          arr1.push(sol)
-          arr.push(sol.origem)
-        }
-
       })
+
       setSolicitacoes(arr1)
       selectUsers(arr)
     }
@@ -48,30 +48,13 @@ function CardFriends({ changeScene, userLogado, users, acesso }) {
   }, [timer])
 
   useEffect(() => {
-    let arr = []
     async function fetchData() {
-      const data = await getDocs(usersCollectionRef)
+      const data = await FetchUsers()
 
-      data.docs.map((s, k) => {
-        const u = {
-          id: s.id,
-          nome: s.data().nome,
-          email: s.data().email,
-          bio: s.data().bio,
-          img: s.data().img,
-          amigos: s.data().amigos,
-          senha: s.data().senha
-        }
-
-        if (u.id === userLogado.id) {
-          setUserL(u)
-        }
-        arr.push(u)
-      })
-      setUsersL(arr)
+      setUserL(data.filter(u => u.id === userLogado.id)[0])
+      setUsersL(data)
       selectUsers()
-      console.log("1")
-      console.log(friendsObj)
+
     }
     fetchData()
   }, [timer])
@@ -79,9 +62,6 @@ function CardFriends({ changeScene, userLogado, users, acesso }) {
   function selectUsers(solicitacoesId) {
     let arr = []
     let arr1 = []
-
-    console.log("2")
-    console.log(userL)
 
     arr = usersL.filter(u => userL.amigos.includes(u.id))
 
@@ -93,50 +73,20 @@ function CardFriends({ changeScene, userLogado, users, acesso }) {
   }
 
   async function removeFriend(friend) {
-
-    let arr = friendsObj.filter(f => f.id !== friend.id)
-    userLogado.amigos = []
-    arr.forEach(v => {
-      userLogado.amigos.push(v.id)
-    })
-    friend.amigos = friend.amigos.filter(f => f !== userLogado.id)
-
-    const userDoc = doc(db, 'users', userLogado.id)
-    await updateDoc(userDoc, userLogado)
-
-    const FriendDoc = doc(db, 'users', friend.id)
-    await updateDoc(FriendDoc, friend)
-
-    setUserL(userLogado)
+    const user = await RemoveFriend(friend, friendsObj, userLogado)
+    setUserL(user)
     selectUsers()
   }
 
   async function cancelSolicitation(u) {
     const solicitation = solicitacoes.find(s => s.origem === u.id)
-    const solicitationDoc = doc(db, "solicitacoes", solicitation.id)
-    await deleteDoc(solicitationDoc)
+    if (solicitation) {
+      await DeleteSolicitation(solicitation)
+    }
   }
 
   async function acceptSolicitation(userAcepted) {
-
-    let arr = userLogado.amigos
-    let arr1 = userAcepted.amigos ? userAcepted.amigos : []
-
-    arr.push(userAcepted.id)
-    arr1.push(userLogado.id)
-
-    let uL = userLogado
-    let uA = userAcepted
-
-    uL.amigos = arr
-    uA.amigos = arr1
-
-    const userLogadoDoc = doc(db, 'users', userLogado.id)
-    await updateDoc(userLogadoDoc, uL)
-
-    const userAceptedDoc = doc(db, 'users', userAcepted.id)
-    await updateDoc(userAceptedDoc, uA)
-
+    await AcceptSolicitation(userAcepted, userLogado)
     await cancelSolicitation(userAcepted)
   }
 

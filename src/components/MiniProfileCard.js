@@ -1,16 +1,18 @@
 import React, { useEffect, useState } from 'react'
 import './MiniProfileCardStyle.css'
+
+//MUI Features
 import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
 import PersonAddAlt1Icon from '@mui/icons-material/PersonAddAlt1';
 import Fab from '@mui/material/Fab';
 import PersonRemoveIcon from '@mui/icons-material/PersonRemove';
 import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
-import { collection, getDocs, } from 'firebase/firestore'
-import { db } from '../db/firebase-config';
+
+// Services
+import FetchUsers from '../services/FetchUsers'
+import FetchSolicitations from '../services/FetchSolicitations'
 
 function MiniProfileCard({ theme, user, back, solicitations, invites, addUser, cancelSolicitation, acceptSolicitation, userLogado, deleteSolicitation }) {
-    const solicitacoesCollectionRef = collection(db, 'solicitacoes')
-    const usersCollenctionRef = collection(db, 'users')
 
     const [pedidosId, setPedidosId] = useState(invites)
     const [timer, setTimer] = useState(false)
@@ -19,25 +21,10 @@ function MiniProfileCard({ theme, user, back, solicitations, invites, addUser, c
 
     useEffect(() => {
         async function fetchData() {
-            const data = await getDocs(usersCollenctionRef)
+            const data = await FetchUsers()
 
-            data.docs.map((u, k) => {
-                const us = {
-                    id: u.id,
-                    nome: u.data().nome,
-                    email: u.data().email,
-                    senha: u.data().senha,
-                    bio: u.data().bio,
-                    img: u.data().img,
-                    amigos: u.data().amigos ? u.data().amigos : []
-                }
-                if (us.id === userLogado.id) {
-                    setUserLogadoA(us)
-                }
-                if (us.id === user.id) {
-                    setUserA(us)
-                }
-            })
+            setUserLogadoA(data.filter(u => u.id === userLogado.id)[0])
+            setUserA(data.filter(u => u.id === user.id)[0])
         }
 
         fetchData()
@@ -45,19 +32,16 @@ function MiniProfileCard({ theme, user, back, solicitations, invites, addUser, c
 
     useEffect(() => {
         async function fetchData() {
-            const data = await getDocs(solicitacoesCollectionRef)
+            const data = await FetchSolicitations()
 
             let arr = []
-            data.docs.map((s, k) => {
-                const sol = {
-                    id: s.id,
-                    origem: s.data().origem,
-                    destino: s.data().destino,
-                }
-                if (sol.destino === userLogado.id) {
-                    arr.push(sol.origem)
+            
+            data.map((s, k) => {
+                if (s.destino === userLogado.id) {
+                    arr.push(s.origem)
                 }
             })
+
             setPedidosId(arr)
         }
         fetchData()

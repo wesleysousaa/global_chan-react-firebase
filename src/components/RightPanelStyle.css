@@ -13,7 +13,7 @@
     border-radius: 6px;
     padding: 5px;
     background-image: linear-gradient( rgba(0, 0, 0, 0.382), rgba(0, 0, 0, 0.224));
-    max-width: fit-content;
+    max-width: min-content;
 }
 
 .img_name:hover{
