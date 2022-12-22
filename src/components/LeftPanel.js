@@ -34,8 +34,12 @@ import MiniProfileCard from './MiniProfileCard';
 import RightPanel from './RightPanel';
 import CardFriends from './CardsFriends';
 
+// Hooks
+import { useUserContext } from '../hooks/useUserContext'
+import { useUsersContext } from '../hooks/useUsersContext'
 
-function LeftPanel({ user, acesso, uploadTheme }) {
+
+function LeftPanel({ acesso, uploadTheme }) {
 
   const [theme, setTheme] = useState(false)
 
@@ -45,11 +49,11 @@ function LeftPanel({ user, acesso, uploadTheme }) {
   const [solicitacoesId, setSolicitacoesId] = useState([])
   const [pedidos, setPedidos] = useState([])
   const [pedidosId, setPedidosId] = useState([])
-  const [amigosId, setAmigosId] = useState([])
 
-  const [userLogado, setUserLogado] = useState(user)
+  const { userLogado, setUserLogado } = useUserContext()
+  const { users, setUsers } = useUsersContext()
+
   const [uExposed, setUExposed] = useState(userLogado)
-  const [users, setUsers] = useState([])
   const [alertMessage, setAlertMessage] = useState(false)
   const [timer, setTimer] = useState(false)
   const [scene, setScene] = useState('chat')
@@ -59,14 +63,12 @@ function LeftPanel({ user, acesso, uploadTheme }) {
     async function fetchData() {
       const data = await FetchUsers()
 
-      setUsers(data.map((user, k) => ({ ...user })))
+      setUsers(data)
       setUserLogado(data.filter(user => user.id === userLogado.id)[0])
-      setAmigosId(userLogado.amigos.map(a => ({ ...a })))
 
     }
     fetchData()
   }, [timer])
-  //[timer], [messageValue]
 
   useEffect(() => {
     async function fetchData() {
@@ -334,7 +336,7 @@ function LeftPanel({ user, acesso, uploadTheme }) {
       )}
 
       {scene === 'friends' && (
-        <CardFriends changeScene={goChat} userLogado={userLogado} users={users} acesso={true} />
+        <CardFriends changeScene={goChat} userLogado={userLogado} acesso={true} />
       )}
     </div>
   )

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import './RightPanelStyle.css';
 
 // MUI features
@@ -11,22 +11,29 @@ import CardFriends from './CardsFriends';
 // Services
 import UpdateUser from '../services/UpdateUser'
 import UploadImage from '../services/UploadImage'
+import FetchUsers from '../services/FetchUsers'
 
-function RightPanel({ theme , user, acesso, goBack, users}) {
+// Hooks
+import { useUserContext } from '../hooks/useUserContext';
+import { useUsersContext } from '../hooks/useUsersContext';
+import { useEffect } from 'react';
+
+function RightPanel({ theme, acesso, goBack }) {
 
   const [scene, setScene] = useState("home")
   const [mensagem, setMensagem] = useState('')
 
-  const [userUp, setUserUp] = useState(user)
-  const [nome, setNome] = useState(user.nome)
-  const [senha, setSenha] = useState(user.senha)
-  const [email, setEmail] = useState(user.email)
-  const [bio, setBio] = useState(user.bio)
+  const { users, setUsers } = useUsersContext()
+  const { userLogado, setUserLogado } = useUserContext()
+  const [userUp, setUserUp] = useState(userLogado)
+  const [nome, setNome] = useState(userLogado.nome)
+  const [senha, setSenha] = useState(userLogado.senha)
+  const [email, setEmail] = useState(userLogado.email)
+  const [bio, setBio] = useState(userLogado.bio)
   const [img, setImg] = useState()
-  const [amigos, setAmigos] = useState(user.amigos)
-
-  const [imgURL, setImgURL] = useState(user.img)
-  const [id, setId] = useState(user.id)
+  const [amigos] = useState(userLogado.amigos)
+  const [imgURL, setImgURL] = useState(userLogado.img)
+  const [id] = useState(userLogado.id)
 
   const [alertTime, setAlertTime] = useState(false)
 
@@ -57,6 +64,7 @@ function RightPanel({ theme , user, acesso, goBack, users}) {
       setMensagem("Senha deve conter pelomenos 8 caracteres")
       return
     }
+
     await UpdateUser(userUp.id, userUpadated)
 
     setMensagem("")
@@ -67,7 +75,10 @@ function RightPanel({ theme , user, acesso, goBack, users}) {
     }, 2000);
 
     userUpadated.id = userUp.id
-    setUserUp(userUpadated)
+    
+    setUsers(await FetchUsers())
+    setUserLogado(users.filter(user => user.id === userLogado.id)[0])
+    setUserUp(userLogado)
   }
 
   function exit() {
@@ -80,7 +91,7 @@ function RightPanel({ theme , user, acesso, goBack, users}) {
       setImgURL(url)
       return imgURL
     }
-    return user.img
+    return userLogado.img
   }
 
   return (
@@ -122,7 +133,7 @@ function RightPanel({ theme , user, acesso, goBack, users}) {
               Dados alterados com Sucesso
             </Alert>
           </Zoom>
-          <form className="forms" onSubmit={(e) => updateUser(e)} style={theme ? {backgroundColor:"rgba(50, 49, 49, 0.413)", backgroundImage:"none", color:"white"} : {}}>
+          <form className="forms" onSubmit={(e) => updateUser(e)} style={theme ? { backgroundColor: "rgba(50, 49, 49, 0.413)", backgroundImage: "none", color: "white" } : {}}>
             <h1 style={{ marginBottom: "0px" }}>Alterar dados</h1>
             <h2 style={mensagem === "Sucesso!" ? { color: "green" } : { color: "red" }}>{mensagem}</h2>
             <label className='labels'>
@@ -143,7 +154,7 @@ function RightPanel({ theme , user, acesso, goBack, users}) {
             </label>
             <label className="labels">
               Biografia
-              <input  maxLength={50} value={bio} style={bio.trim().length === 0 && mensagem === "Campo obrigatório" ? { color: "red", borderColor: "red" } : {}} className="inputs" type="text" name="Senha" onChange={(e) => setBio(e.target.value)} />
+              <input maxLength={50} value={bio} style={bio.trim().length === 0 && mensagem === "Campo obrigatório" ? { color: "red", borderColor: "red" } : {}} className="inputs" type="text" name="Senha" onChange={(e) => setBio(e.target.value)} />
             </label>
             <div className="bts">
               <input type="button" value="Voltar" className="cancel-button" onClick={() => changeScene("home")} />
@@ -154,7 +165,7 @@ function RightPanel({ theme , user, acesso, goBack, users}) {
       )}
       {scene === 'friends' && (
 
-        <CardFriends changeScene={changeScene} userLogado={user} users={users}/>
+        <CardFriends changeScene={changeScene} users={users} />
 
       )}
 

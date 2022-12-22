@@ -18,14 +18,21 @@ import RemoveFriend from '../services/RemoveFriend'
 import FetchUsers from '../services/FetchUsers'
 import FetchSolicitations from '../services/FetchSolicitations'
 
-function CardFriends({ changeScene, userLogado, users, acesso }) {
+// Hooks
+import { useUserContext } from '../hooks/useUserContext';
+import { useUsersContext } from '../hooks/useUsersContext';
+
+function CardFriends({ changeScene, acesso }) {
 
   const [friendsObj, setFriendsObj] = useState([])
   const [scene, setScene] = useState('friends')
   const [usersInvited, setUsersInvited] = useState([])
   const [solicitacoes, setSolicitacoes] = useState([])
   const [timer, setTimer] = useState(false)
-  const [userL, setUserL] = useState(userLogado)
+
+  const {userLogado, setUserLogado} = useUserContext()
+  const {users, setUsers} = useUsersContext()
+
   const [usersL, setUsersL] = useState(users)
 
   useEffect(() => {
@@ -51,7 +58,7 @@ function CardFriends({ changeScene, userLogado, users, acesso }) {
     async function fetchData() {
       const data = await FetchUsers()
 
-      setUserL(data.filter(u => u.id === userLogado.id)[0])
+      setUserLogado(data.filter(u => u.id === userLogado.id)[0])
       setUsersL(data)
       selectUsers()
 
@@ -63,7 +70,7 @@ function CardFriends({ changeScene, userLogado, users, acesso }) {
     let arr = []
     let arr1 = []
 
-    arr = usersL.filter(u => userL.amigos.includes(u.id))
+    arr = usersL.filter(u => userLogado.amigos.includes(u.id))
 
     if (solicitacoesId) {
       arr1 = usersL.filter(u => solicitacoesId.includes(u.id))
@@ -74,7 +81,7 @@ function CardFriends({ changeScene, userLogado, users, acesso }) {
 
   async function removeFriend(friend) {
     const user = await RemoveFriend(friend, friendsObj, userLogado)
-    setUserL(user)
+    setUserLogado(user)
     selectUsers()
   }
 

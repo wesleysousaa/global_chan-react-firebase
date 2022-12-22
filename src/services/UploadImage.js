@@ -8,9 +8,8 @@ export default async function UploadImage(img, id) {
     await uploadBytes(imageRef, img).then((snapshot) => {
     })
 
-    const url = await getDownloadURL(imageRef).then((url) => {
+    await getDownloadURL(imageRef).then((url) => {
         return url
     })
-    return url
 
 }
