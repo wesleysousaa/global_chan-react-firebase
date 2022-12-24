@@ -37,11 +37,12 @@ import CardFriends from './CardsFriends';
 // Hooks
 import { useUserContext } from '../hooks/useUserContext'
 import { useUsersContext } from '../hooks/useUsersContext'
+import { useThemeContext } from '../hooks/useThemeContext'
+import { useSceneContext } from '../hooks/useSceneContext'
 
+function LeftPanel() {
 
-function LeftPanel({ acesso, uploadTheme }) {
-
-  const [theme, setTheme] = useState(false)
+  const { theme, setTheme } = useThemeContext()
 
   const [messages, setMessages] = useState([])
   const [messageValue, setMessageValue] = useState('')
@@ -52,11 +53,11 @@ function LeftPanel({ acesso, uploadTheme }) {
 
   const { userLogado, setUserLogado } = useUserContext()
   const { users, setUsers } = useUsersContext()
+  const { scene, setScene } = useSceneContext()
 
   const [uExposed, setUExposed] = useState(userLogado)
   const [alertMessage, setAlertMessage] = useState(false)
   const [timer, setTimer] = useState(false)
-  const [scene, setScene] = useState('chat')
   const [trigger, setTrigger] = useState(false)
 
   useEffect(() => {
@@ -182,7 +183,9 @@ function LeftPanel({ acesso, uploadTheme }) {
   }
 
   function exit() {
-    acesso()
+    setUserLogado()
+    localStorage.clear()
+    setScene('login')
   }
 
   function goChat() {
@@ -205,11 +208,6 @@ function LeftPanel({ acesso, uploadTheme }) {
     setUserLogado(u)
     setUExposed(userExposed.id === u.id ? u : uExposed)
     setTrigger(!trigger)
-  }
-
-  function changeTheme() {
-    uploadTheme(!theme)
-    setTheme(!theme)
   }
 
   return (
@@ -292,7 +290,7 @@ function LeftPanel({ acesso, uploadTheme }) {
             </div>
 
             {scene === "exposed" && (
-              <MiniProfileCard theme={theme} deleteSolicitation={deleteSolicitation} userLogado={userLogado} user={uExposed} back={goChat} solicitations={solicitacoesId} invites={pedidosId} addUser={addFriend} cancelSolicitation={deleteInvite} acceptSolicitation={acceptSolicitation} updateInvites={refreshInvites} />
+              <MiniProfileCard deleteSolicitation={deleteSolicitation} userLogado={userLogado} user={uExposed} back={goChat} solicitations={solicitacoesId} invites={pedidosId} addUser={addFriend} cancelSolicitation={deleteInvite} acceptSolicitation={acceptSolicitation} updateInvites={refreshInvites} />
             )}
 
             {alertMessage && (
@@ -315,9 +313,8 @@ function LeftPanel({ acesso, uploadTheme }) {
                   </div>
                 ))
               )}
-              <Fab color="inherit" aria-label="add" className='floating-theme-button' style={{ position: "fixed", margin: "5px", backgroundColor: "rgba(255, 255, 255, 0.243)" }} onClick={changeTheme}>
+              <Fab color="inherit" aria-label="add" className='floating-theme-button' style={{ position: "fixed", margin: "5px", backgroundColor: "rgba(255, 255, 255, 0.243)" }} onClick={() => setTheme(!theme)}>
                 {theme ? <Brightness7Icon /> : <Brightness4Icon />}
-
               </Fab>
             </div>
             <form className='form-chat' onSubmit={(e) => sendMessage(e)}>
@@ -332,11 +329,11 @@ function LeftPanel({ acesso, uploadTheme }) {
         </div>
       )}
       {scene === 'profile' && (
-        <RightPanel theme={theme} refreshUser={refreshUser} className="right" user={userLogado} goBack={goChat} />
+        <RightPanel className="right" mobile={true} />
       )}
 
       {scene === 'friends' && (
-        <CardFriends changeScene={goChat} userLogado={userLogado} acesso={true} />
+        <CardFriends changeScene={goChat} userLogado={userLogado} friends={true} />
       )}
     </div>
   )

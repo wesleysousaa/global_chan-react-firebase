@@ -12,21 +12,22 @@ import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
 import FetchUsers from '../services/FetchUsers'
 import FetchSolicitations from '../services/FetchSolicitations'
 
-function MiniProfileCard({ theme, user, back, solicitations, invites, addUser, cancelSolicitation, acceptSolicitation, userLogado, deleteSolicitation }) {
+// Hooks
+import { useThemeContext } from '../hooks/useThemeContext';
+
+function MiniProfileCard({ user, back, solicitations, invites, addUser, cancelSolicitation, acceptSolicitation, userLogado, deleteSolicitation }) {
+
+    const {theme} = useThemeContext()
 
     const [pedidosId, setPedidosId] = useState(invites)
     const [timer, setTimer] = useState(false)
     const [userLogadoA, setUserLogadoA] = useState(userLogado)
-    const [userA, setUserA] = useState(user)
 
     useEffect(() => {
         async function fetchData() {
             const data = await FetchUsers()
-
             setUserLogadoA(data.filter(u => u.id === userLogado.id)[0])
-            setUserA(data.filter(u => u.id === user.id)[0])
         }
-
         fetchData()
     }, [timer])
 
@@ -35,7 +36,7 @@ function MiniProfileCard({ theme, user, back, solicitations, invites, addUser, c
             const data = await FetchSolicitations()
 
             let arr = []
-            
+
             data.map((s, k) => {
                 if (s.destino === userLogado.id) {
                     arr.push(s.origem)
@@ -54,7 +55,7 @@ function MiniProfileCard({ theme, user, back, solicitations, invites, addUser, c
                     setTimer(!timer)
                 }, 5000)}
             </div>
-            <div className="itens" style={theme ? {color:"white"} : {color:"black"}}>
+            <div className="itens" style={theme ? { color: "white" } : { color: "black" }}>
                 <div className='info-profile'>
                     <div className="img-name-bio" >
                         <img src={user.img} alt="foto-perfil" className='picture-profile-select' />
@@ -71,7 +72,7 @@ function MiniProfileCard({ theme, user, back, solicitations, invites, addUser, c
                     </div>
 
                     {userLogadoA.amigos.includes(user.id) && (
-                        <div className='amigos' style={theme ? {backgroundColor:"#ed6c02", color:"white"} : {}}>
+                        <div className='amigos' style={theme ? { backgroundColor: "#ed6c02", color: "white" } : {}}>
                             <PeopleAltIcon />
                             Amigo
                         </div>

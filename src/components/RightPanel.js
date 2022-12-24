@@ -16,15 +16,20 @@ import FetchUsers from '../services/FetchUsers'
 // Hooks
 import { useUserContext } from '../hooks/useUserContext';
 import { useUsersContext } from '../hooks/useUsersContext';
-import { useEffect } from 'react';
+import { useThemeContext } from '../hooks/useThemeContext';
+import { useSceneContext } from '../hooks/useSceneContext';
 
-function RightPanel({ theme, acesso, goBack }) {
+function RightPanel({ mobile }) {
 
-  const [scene, setScene] = useState("home")
+  const [cena, setCena] = useState("home")
+  const {setScene} = useSceneContext()
+
   const [mensagem, setMensagem] = useState('')
 
   const { users, setUsers } = useUsersContext()
   const { userLogado, setUserLogado } = useUserContext()
+  const { theme } = useThemeContext()
+
   const [userUp, setUserUp] = useState(userLogado)
   const [nome, setNome] = useState(userLogado.nome)
   const [senha, setSenha] = useState(userLogado.senha)
@@ -38,7 +43,7 @@ function RightPanel({ theme, acesso, goBack }) {
   const [alertTime, setAlertTime] = useState(false)
 
   function changeScene(sceneC) {
-    setScene(sceneC)
+    setCena(sceneC)
   }
 
   async function updateUser(e) {
@@ -75,14 +80,10 @@ function RightPanel({ theme, acesso, goBack }) {
     }, 2000);
 
     userUpadated.id = userUp.id
-    
+
     setUsers(await FetchUsers())
     setUserLogado(users.filter(user => user.id === userLogado.id)[0])
     setUserUp(userLogado)
-  }
-
-  function exit() {
-    acesso()
   }
 
   async function uploadImage() {
@@ -94,9 +95,15 @@ function RightPanel({ theme, acesso, goBack }) {
     return userLogado.img
   }
 
+  function exit(){
+    setScene('login')
+    setUserLogado()
+    localStorage.clear()
+  }
+
   return (
-    <div className={acesso ? "right" : "right-smartphone"}>
-      {scene === 'home' && (
+    <div className={!mobile ? "right" : "right-smartphone"}>
+      {cena === 'home' && (
         <div className="profile">
           <h1 style={{ borderBottom: "solid 5px black" }}>Meu Perfil</h1>
           <div className="img_name" onClick={() => changeScene('update')}>
@@ -113,19 +120,19 @@ function RightPanel({ theme, acesso, goBack }) {
             </div>
 
           </div>
-          {acesso && (
+          {!mobile && (
             <div className='bts-profile'>
               <button className='confirm-button' onClick={() => changeScene('friends')}>Amigos</button>
               <button className='cancel-button' onClick={exit}>Sair</button>
             </div>
           )}
-          {!acesso && (
-            <button className='cancel-button' onClick={goBack}>Voltar</button>
+          {mobile && (
+            <button className='cancel-button' onClick={() => setScene('chat')}>Voltar</button>
           )}
 
         </div>
       )}
-      {scene === 'update' && (
+      {cena === 'update' && (
         <div className="login-register" style={{ backgroundImage: 'none' }}>
 
           <Zoom in={alertTime} style={{ transitionDelay: alertTime ? '0ms' : '500ms' }}>
@@ -163,7 +170,7 @@ function RightPanel({ theme, acesso, goBack }) {
           </form>
         </div>
       )}
-      {scene === 'friends' && (
+      {cena === 'friends' && (
 
         <CardFriends changeScene={changeScene} users={users} />
 

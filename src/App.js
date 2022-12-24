@@ -15,10 +15,9 @@ import CircularProgress from '@mui/material/CircularProgress';
 // Hooks
 import { useUserContext } from './hooks/useUserContext';
 import { useUsersContext } from './hooks/useUsersContext';
+import { useSceneContext } from './hooks/useSceneContext';
 
 function App() {
-
-  const [theme, setTheme] = useState(false)
 
   const [newEmail, setNewEmail] = useState("")
   const [newSenha, setNewSenha] = useState("")
@@ -32,9 +31,10 @@ function App() {
   const [mensagemCadastro, setMensagemCadastro] = useState("")
 
   const [emails, setEmails] = useState([])
+
   const { users, setUsers } = useUsersContext()
   const { userLogado, setUserLogado } = useUserContext()
-  const [scene, setScene] = useState("login")
+  const { scene, setScene } = useSceneContext()
 
   const [recent, setRecent] = useState(false)
 
@@ -48,6 +48,9 @@ function App() {
       setEmails(arr)
     }
     fetchData()
+    if (localStorage.length > 0) {
+      setUserLogado(JSON.parse(localStorage.getItem('user')))
+    }
   }, [scene])
 
   function handleLogin(e) {
@@ -64,6 +67,10 @@ function App() {
           setUserLogado(u)
           setMensagemLogin('')
           setScene('register')
+          localStorage.setItem("user", JSON.stringify(u))
+          setEmail('')
+          setSenha('')
+          setMensagemLogin('')
           return
         } else {
           setMensagemLogin('Senha inválida')
@@ -108,6 +115,7 @@ function App() {
   }
 
   function changeScene() {
+    localStorage.clear()
     setUserLogado()
     const sceneString = scene === 'register' ? 'login' : 'register'
     setEmail('')
@@ -117,16 +125,9 @@ function App() {
     setMensagemCadastro('')
   }
 
-  function refreshUser(u) {
-    setUserLogado(u)
-  }
-
-  function uploadTheme(t) {
-    setTheme(t)
-  }
-
   return (
     <div className="m" style={!users ? { display: "flex", alignItems: "center", justifyContent: "center" } : {}}>
+
       {!users && (
         <CircularProgress size={200} />
       )}
@@ -134,8 +135,8 @@ function App() {
       {users && (
         userLogado ? (
           <div className="App">
-            <LeftPanel className="left" uploadTheme={uploadTheme} acesso={changeScene} />
-            <RightPanel className="right" theme={theme} acesso={changeScene} users={users} userUpadated={refreshUser} />
+            <LeftPanel className="left" />
+            <RightPanel className="right" />
           </div>
         ) : (
           scene === "login" ? (
