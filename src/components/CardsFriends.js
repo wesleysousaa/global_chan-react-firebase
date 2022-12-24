@@ -25,13 +25,13 @@ import { useUsersContext } from '../hooks/useUsersContext';
 function CardFriends({ changeScene, acesso }) {
 
   const [friendsObj, setFriendsObj] = useState([])
-  const [scene, setScene] = useState('friends')
+  const [cena, setCena] = useState('friends')
   const [usersInvited, setUsersInvited] = useState([])
   const [solicitacoes, setSolicitacoes] = useState([])
   const [timer, setTimer] = useState(false)
 
   const {userLogado, setUserLogado} = useUserContext()
-  const {users, setUsers} = useUsersContext()
+  const {users} = useUsersContext()
 
   const [usersL, setUsersL] = useState(users)
 
@@ -104,12 +104,12 @@ function CardFriends({ changeScene, acesso }) {
           setTimer(!timer)
         }, 3000)}
       </div>
-      {scene === 'friends' && (
+      {cena === 'friends' && (
         <>
           <div className='header-cards-friends'>
             <h1 className='title-cards-friends'>Amigos</h1>
 
-            <Fab variant="extended" color="secondary" size="medium" aria-label="add" onClick={() => setScene('solicitations')}>
+            <Fab variant="extended" color="secondary" size="medium" aria-label="add" onClick={() => setCena('solicitations')}>
               <Badge badgeContent={solicitacoes.length} color="error">
                 <PersonAddAlt1Icon />
                 Solicitações
@@ -128,7 +128,7 @@ function CardFriends({ changeScene, acesso }) {
           <button className="confirm-button" onClick={() => changeScene('home')}>Voltar</button>
         </>
       )}
-      {scene === 'solicitations' && (
+      {cena === 'solicitations' && (
         <>
           <h1 className='title-cards-friends'>Solicitações</h1>
 
